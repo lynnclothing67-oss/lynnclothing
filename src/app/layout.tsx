@@ -10,18 +10,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 function LayoutWrapper({ children }: { children: React.ReactNode }) {
-  const [isClient, setIsClient] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    // Render nothing on the server to avoid mismatch
-    return null;
-  }
-
   const isAdminLogin = pathname === '/admin/login';
 
   return (
@@ -40,6 +29,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -48,7 +43,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <LayoutWrapper>{children}</LayoutWrapper>
+        {isClient ? <LayoutWrapper>{children}</LayoutWrapper> : null}
       </body>
     </html>
   );
