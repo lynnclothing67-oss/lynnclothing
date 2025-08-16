@@ -1,13 +1,23 @@
 
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public read access to the products collection
     match /products/{productId} {
       allow read: if true;
-      // Allow write access for now for admin functionality.
-      // TODO: Restrict write access to authenticated admin users.
-      allow write: if true;
+      allow write: if true; // In production, you should restrict this to authenticated admins
+    }
+  }
+}
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow public read access to all files
+    match /{allPaths=**} {
+      allow read: if true;
+      // Allow write access only for files in the 'products' folder.
+      // In production, you would want to restrict this further to authenticated admins.
+      allow write: if request.resource.path.matches('products/.*');
     }
   }
 }
