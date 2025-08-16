@@ -63,10 +63,12 @@ export default function EditProductPage() {
         return;
       }
 
+      const discountValue = (document.getElementById('discount') as HTMLInputElement).value;
       const updatedProduct: Partial<Product> = {
         name: (document.getElementById('name') as HTMLInputElement).value,
         category: (document.getElementById('category') as HTMLInputElement).value,
         price: parseFloat((document.getElementById('price') as HTMLInputElement).value),
+        discount: discountValue ? parseFloat(discountValue) : undefined,
         description: (document.getElementById('description') as HTMLTextAreaElement).value,
         images: imageUrls,
         details: product.details,
@@ -108,9 +110,15 @@ export default function EditProductPage() {
                 <Label htmlFor="category">Category</Label>
                 <Input id="category" defaultValue={product.category} required />
               </div>
-               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="price">Price</Label>
-                <Input id="price" type="number" defaultValue={product.price} required />
+               <div className="grid grid-cols-2 gap-4">
+                 <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="price">Price</Label>
+                  <Input id="price" type="number" defaultValue={product.price} required />
+                </div>
+                 <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="discount">Discount (%)</Label>
+                  <Input id="discount" type="number" defaultValue={product.discount} placeholder="e.g. 10" />
+                </div>
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="description">Description</Label>

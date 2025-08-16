@@ -34,6 +34,10 @@ export default function ProductPage() {
     return <div>Loading...</div>;
   }
 
+  const discountedPrice = product.discount 
+    ? product.price - (product.price * (product.discount / 100))
+    : product.price;
+
   const whatsappMessage = `Hi, I'm interested in this product: ${product.name}`;
   const whatsappUrl = `https://wa.me/7907963091?text=${encodeURIComponent(whatsappMessage)}`;
 
@@ -52,6 +56,11 @@ export default function ProductPage() {
                     objectFit="cover"
                     data-ai-hint="woman model"
                   />
+                   {product.discount && (
+                    <Badge className="absolute top-4 right-4 text-lg">
+                      {product.discount}% OFF
+                    </Badge>
+                  )}
                 </div>
               </CarouselItem>
             ))}
@@ -63,7 +72,14 @@ export default function ProductPage() {
         <div className="flex flex-col gap-6">
           <Badge variant="secondary" className="w-fit capitalize">{product.category}</Badge>
           <h1 className="font-headline text-4xl md:text-5xl font-bold">{product.name}</h1>
-          <p className="text-3xl font-semibold text-primary">₹{product.price.toFixed(2)}</p>
+          <div className="flex items-baseline gap-4">
+            <p className="text-3xl font-semibold text-primary">₹{discountedPrice.toFixed(2)}</p>
+             {product.discount && (
+                <p className="text-xl font-medium text-muted-foreground line-through">
+                  ₹{product.price.toFixed(2)}
+                </p>
+              )}
+          </div>
           <p className="text-muted-foreground leading-relaxed">{product.description}</p>
           
           <div>

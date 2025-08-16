@@ -48,10 +48,12 @@ export default function NewProductPage() {
     setLoading(true);
 
     try {
+      const discountValue = (document.getElementById('discount') as HTMLInputElement).value;
       const newProduct: Omit<Product, 'id'> = {
         name: (document.getElementById('name') as HTMLInputElement).value,
         category: (document.getElementById('category') as HTMLInputElement).value,
         price: parseFloat((document.getElementById('price') as HTMLInputElement).value),
+        discount: discountValue ? parseFloat(discountValue) : undefined,
         description: (document.getElementById('description') as HTMLTextAreaElement).value,
         images: imageUrls,
         details: [], // Add logic to collect details if needed
@@ -93,9 +95,15 @@ export default function NewProductPage() {
                 <Label htmlFor="category">Category</Label>
                 <Input id="category" placeholder="e.g. dresses" required />
               </div>
-               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="price">Price</Label>
-                <Input id="price" type="number" placeholder="e.g. 5000.00" required />
+               <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="price">Price</Label>
+                  <Input id="price" type="number" placeholder="e.g. 5000.00" required />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="discount">Discount (%)</Label>
+                  <Input id="discount" type="number" placeholder="e.g. 10" />
+                </div>
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="description">Description</Label>

@@ -9,6 +9,10 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const discountedPrice = product.discount 
+    ? product.price - (product.price * (product.discount / 100))
+    : product.price;
+
   return (
     <Link href={`/products/${product.id}`}>
       <Card className="overflow-hidden h-full group transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-2 border-transparent hover:border-primary/20 bg-transparent">
@@ -27,9 +31,16 @@ export default function ProductCard({ product }: ProductCardProps) {
             <h3 className="font-headline text-lg font-semibold truncate">
               {product.name}
             </h3>
-            <p className="text-primary font-medium mt-1">
-              ₹{product.price.toFixed(2)}
-            </p>
+            <div className="flex items-baseline gap-2 mt-1">
+              <p className="text-primary font-medium">
+                ₹{discountedPrice.toFixed(2)}
+              </p>
+              {product.discount && (
+                <p className="text-muted-foreground line-through text-sm">
+                  ₹{product.price.toFixed(2)}
+                </p>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>

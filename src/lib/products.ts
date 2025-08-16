@@ -8,6 +8,7 @@ export const products: Product[] = [
     name: "Elegant Pink Salwar Suit",
     category: "salwar readymade",
     price: 120.0,
+    discount: 10,
     images: [
       "https://placehold.co/600x800.png",
     ],
@@ -30,6 +31,7 @@ export const products: Product[] = [
     name: "Casual Striped Top",
     category: "tops",
     price: 45.0,
+    discount: 15,
     images: [
       "https://placehold.co/600x800.png",
     ],
@@ -63,6 +65,7 @@ export const products: Product[] = [
     name: "Stylish Denim Skirt",
     category: "denim skirt",
     price: 60.0,
+    discount: 20,
     images: [
         "https://placehold.co/600x800.png"
     ],
@@ -94,7 +97,7 @@ export const products: Product[] = [
   {
     id: "9",
     name: "Bandhani Print Dupatta",
-    category: "dupattas",
+    category: "duppattas",
     price: 30.0,
     images: [
         "https://placehold.co/600x800.png"
