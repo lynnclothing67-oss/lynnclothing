@@ -1,22 +1,25 @@
 import Image from 'next/image';
 import { products } from '@/lib/products';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { PlusCircle, Edit, Trash2 } from 'lucide-react';
+import { PlusCircle, Edit, Trash2, ShoppingBag } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AdminDashboard() {
   return (
     <div className="container mx-auto px-4 py-8">
+      <div className="flex flex-col items-center gap-4 mb-8">
+        <Link href="/" className="flex items-center gap-2">
+            <ShoppingBag className="w-8 h-8 text-primary" />
+            <span className="text-2xl font-bold font-headline text-primary">
+              PetalCart
+            </span>
+        </Link>
+        <h1 className="font-headline text-3xl text-center">Product Management</h1>
+      </div>
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="font-headline text-3xl">Product Management</CardTitle>
-          <Button>
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Add Product
-          </Button>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow>
@@ -62,6 +65,12 @@ export default function AdminDashboard() {
             </TableBody>
           </Table>
         </CardContent>
+        <CardFooter className="flex justify-end pt-6">
+            <Button>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Add Product
+            </Button>
+        </CardFooter>
       </Card>
     </div>
   );
