@@ -5,7 +5,9 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   User,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  updateEmail,
+  updatePassword
 } from 'firebase/auth';
 import { auth } from './firebase';
 
@@ -56,3 +58,25 @@ export const getCurrentUser = (): Promise<User | null> => {
         });
     });
 };
+
+export const updateUserEmail = async (user: User, newEmail: string): Promise<void> => {
+    try {
+        await updateEmail(user, newEmail);
+    } catch (error) {
+        console.error("Error updating email:", error);
+        // This operation is sensitive and requires recent authentication.
+        // You might need to re-authenticate the user before calling this method.
+        throw error;
+    }
+}
+
+export const updateUserPassword = async (user: User, newPassword: string): Promise<void> => {
+    try {
+        await updatePassword(user, newPassword);
+    } catch (error) {
+        console.error("Error updating password:", error);
+        // This operation is sensitive and requires recent authentication.
+        // You might need to re-authenticate the user before calling this method.
+        throw error;
+    }
+}
