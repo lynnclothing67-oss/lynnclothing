@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AuthProvider } from "@/hooks/use-auth";
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -22,12 +23,12 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   }
 
   return (
-    <>
+    <AuthProvider>
       {!isAdminPath && <Header />}
       <main className="flex-grow">{children}</main>
       {!isAdminPath && <Footer />}
       {!isAdminPath && <WhatsAppButton />}
       <Toaster />
-    </>
+    </AuthProvider>
   );
 }

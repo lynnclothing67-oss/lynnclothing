@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { ShoppingBag, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { signIn } from '@/lib/auth-service';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
@@ -18,27 +19,26 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      if (email === 'admin@example.com' && password === 'password') {
-        toast({
-          title: 'Login Successful',
-          description: 'Welcome back, Admin!',
-        });
-        router.push('/admin');
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Login Failed',
-          description: 'Invalid email or password.',
-        });
-      }
+    try {
+      await signIn(email, password);
+      toast({
+        title: 'Login Successful',
+        description: 'Welcome back!',
+      });
+      router.push('/admin');
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Login Failed',
+        description: error.message || 'An unexpected error occurred.',
+      });
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
