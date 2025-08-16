@@ -18,7 +18,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   }, []);
 
   if (!isClient) {
-    // Render nothing on the server to avoid hydration mismatch
+    // Return a placeholder or null on the server to avoid mismatches
     return null;
   }
 
