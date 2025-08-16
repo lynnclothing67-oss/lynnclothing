@@ -18,6 +18,7 @@ export default function Home() {
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('');
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,6 +28,9 @@ export default function Home() {
         setFilteredProducts(fetchedProducts);
         const uniqueCategories = [...new Set(fetchedProducts.map((p) => p.category))];
         setCategories(uniqueCategories);
+        if (uniqueCategories.length > 0) {
+          setActiveTab(uniqueCategories[0]);
+        }
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
@@ -44,12 +48,23 @@ export default function Home() {
       product.description.toLowerCase().includes(lowercasedQuery)
     );
     setFilteredProducts(results);
-  }, [searchQuery, allProducts]);
+    
+    // If searching, deactivate tab filtering to show all results
+    if (lowercasedQuery) {
+        setActiveTab('');
+    } else if (categories.length > 0) {
+        // If search is cleared, reset to the first category
+        setActiveTab(categories[0]);
+    }
+
+  }, [searchQuery, allProducts, categories]);
 
 
   if (loading) {
     return <div>Loading...</div>
   }
+  
+  const productsToShow = activeTab ? filteredProducts.filter(p => p.category === activeTab) : filteredProducts;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -91,33 +106,9 @@ export default function Home() {
                 />
             </div>
         </div>
-        <Tabs defaultValue={categories[0]} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-5 bg-transparent p-0 gap-2 mb-8">
-            {categories.map((category) => (
-              <TabsTrigger
-                key={category}
-                value={category}
-                className="capitalize text-lg py-3 rounded-md border border-transparent data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"
-              >
-                {category}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          {categories.map((category) => (
-            <TabsContent key={category} value={category}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {filteredProducts
-                  .filter((p) => p.category === category)
-                  .map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                  ))}
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
-         {searchQuery && (
-          <div className="mt-12">
+        
+        {searchQuery ? (
+           <div className="mt-12">
             <h2 className="font-headline text-3xl font-bold text-center mb-8">Search Results for "{searchQuery}"</h2>
             {filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -129,6 +120,32 @@ export default function Home() {
               <p className="text-center text-muted-foreground">No products found matching your search.</p>
             )}
           </div>
+        ) : (
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="flex flex-wrap justify-center w-full bg-transparent p-0 gap-2 mb-8 h-auto">
+                {categories.map((category) => (
+                <TabsTrigger
+                    key={category}
+                    value={category}
+                    className="capitalize text-lg py-3 rounded-md border border-transparent data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"
+                >
+                    {category}
+                </TabsTrigger>
+                ))}
+            </TabsList>
+
+            {categories.map((category) => (
+                <TabsContent key={category} value={category}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {allProducts
+                    .filter((p) => p.category === category)
+                    .map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                    ))}
+                </div>
+                </TabsContent>
+            ))}
+            </Tabs>
         )}
       </section>
     </div>
