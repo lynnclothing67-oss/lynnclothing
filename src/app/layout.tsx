@@ -7,9 +7,11 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import "./globals.css";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 function BodyContent({ children }: { children: React.ReactNode }) {
   const [isClient, setIsClient] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setIsClient(true);
@@ -19,14 +21,16 @@ function BodyContent({ children }: { children: React.ReactNode }) {
     return null;
   }
   
+  const isAdminLogin = pathname === '/admin/login';
+
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <Header />
+        {!isAdminLogin && <Header />}
         <main className="flex-grow">{children}</main>
-        <Footer />
+        {!isAdminLogin && <Footer />}
       </div>
-      <WhatsAppButton />
+      {!isAdminLogin && <WhatsAppButton />}
       <Toaster />
     </>
   );

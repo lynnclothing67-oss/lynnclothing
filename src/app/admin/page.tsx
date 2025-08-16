@@ -1,9 +1,10 @@
+
 import Image from 'next/image';
 import { products } from '@/lib/products';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { PlusCircle, Edit, Trash2, ShoppingBag } from 'lucide-react';
+import { PlusCircle, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
@@ -49,16 +50,7 @@ export default function AdminDashboard() {
                   <TableCell className="capitalize">{product.category}</TableCell>
                   <TableCell>${product.price.toFixed(2)}</TableCell>
                   <TableCell>
-                    <div className="flex gap-2 justify-end">
-                      <Button variant="outline" size="icon">
-                        <Edit className="h-4 w-4" />
-                        <span className="sr-only">Edit</span>
-                      </Button>
-                      <Button variant="destructive" size="icon">
-                        <Trash2 className="h-4 w-4" />
-                         <span className="sr-only">Delete</span>
-                      </Button>
-                    </div>
+                    {/* Actions can be added here later */}
                   </TableCell>
                 </TableRow>
               ))}
