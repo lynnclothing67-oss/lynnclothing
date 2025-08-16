@@ -67,7 +67,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" variant="outline" className="w-full text-lg py-7" asChild>
+            <Button size="lg" className="w-full text-lg py-7" asChild>
               <Link href={whatsappUrl} target="_blank">
                 <MessageSquare className="mr-2" />
                 Buy Now
@@ -75,9 +75,9 @@ export default function ProductPage({ params }: ProductPageProps) {
             </Button>
           </div>
           
-          <ProductRecommendations currentProduct={product} />
         </div>
       </div>
+      <ProductRecommendations currentProduct={product} />
     </div>
   );
 }

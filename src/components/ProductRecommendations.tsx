@@ -17,20 +17,17 @@ export function ProductRecommendations({ currentProduct }: { currentProduct: Pro
   }
 
   return (
-    <Card className="bg-secondary/30 border-primary/20 mt-4">
-      <CardHeader>
-        <CardTitle className="font-headline text-2xl flex items-center gap-2">
-            <Sparkles className="text-primary" />
-            <span>Other Products in this Section</span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="mt-12">
+      <div className="flex items-center justify-center mb-8">
+        <Sparkles className="h-6 w-6 text-primary mr-3" />
+        <h2 className="font-headline text-3xl font-bold text-center">Other Products in this Section</h2>
+         <Sparkles className="h-6 w-6 text-primary ml-3" />
+      </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {recommendedProducts.map(product => (
                 <ProductCard key={product.id} product={product} />
             ))}
         </div>
-      </CardContent>
-    </Card>
+    </div>
   );
 }
