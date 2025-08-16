@@ -7,21 +7,24 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, PlusCircle, ShoppingBag } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, ShoppingBag, Sprout } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Product } from '@/lib/types';
-import { deleteProduct, getProducts } from '@/lib/products-service';
+import { deleteProduct, getProducts, addProduct } from '@/lib/products-service';
 import { useToast } from '@/hooks/use-toast';
+import { products as dummyProducts } from '@/lib/products';
 
 export default function AdminDashboard() {
   const [products, setProducts] = useState<Product[]>([]);
   const { toast } = useToast();
+  const [isSeeding, setIsSeeding] = useState(false);
+
+  const fetchProducts = async () => {
+    const products = await getProducts();
+    setProducts(products);
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const products = await getProducts();
-      setProducts(products);
-    };
     fetchProducts();
   }, []);
 
@@ -42,6 +45,36 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleSeedDatabase = async () => {
+    setIsSeeding(true);
+    try {
+      toast({
+        title: 'Seeding Database',
+        description: 'Please wait while we add the dummy products.',
+      });
+      let count = 0;
+      for (const product of dummyProducts) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id, ...productToAdd } = product; 
+        await addProduct(productToAdd);
+        count++;
+      }
+      await fetchProducts(); // Refresh the product list
+      toast({
+        title: 'Database Seeded',
+        description: `${count} products have been successfully added.`,
+      });
+    } catch (error) {
+       toast({
+        variant: 'destructive',
+        title: 'Error Seeding Database',
+        description: 'There was an error adding the dummy products.',
+      });
+    } finally {
+      setIsSeeding(false);
+    }
+  }
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-secondary/50">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
@@ -55,9 +88,15 @@ export default function AdminDashboard() {
         </header>
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           <Card>
-             <CardHeader>
-                <CardTitle>Products</CardTitle>
-                <CardDescription>Manage your products and view their sales performance.</CardDescription>
+             <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                    <CardTitle>Products</CardTitle>
+                    <CardDescription>Manage your products and view their sales performance.</CardDescription>
+                </div>
+                <Button onClick={handleSeedDatabase} disabled={isSeeding || products.length > 0} variant="outline">
+                    <Sprout className="mr-2 h-4 w-4" />
+                    {isSeeding ? 'Seeding...' : 'Seed Database'}
+                </Button>
             </CardHeader>
             <CardContent>
               <Table>
