@@ -11,20 +11,23 @@ import { ProductRecommendations } from "@/components/ProductRecommendations";
 import { Check, MessageSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Product } from "@/lib/types";
-import { getProduct } from "@/lib/products-service";
+import { getProduct, getProducts } from "@/lib/products-service";
 
 export default function ProductPage() {
   const params = useParams();
   const [product, setProduct] = useState<Product | null>(null);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProductData = async () => {
       const p = await getProduct(params.id as string);
       setProduct(p);
+      const all = await getProducts();
+      setAllProducts(all);
     };
 
     if (params.id) {
-      fetchProduct();
+      fetchProductData();
     }
   }, [params.id]);
 
@@ -106,7 +109,7 @@ export default function ProductPage() {
           
         </div>
       </div>
-      <ProductRecommendations currentProduct={product} />
+      <ProductRecommendations currentProduct={product} allProducts={allProducts} />
     </div>
   );
 }
