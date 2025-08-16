@@ -22,6 +22,8 @@ export default function EditProductPage() {
   const [loading, setLoading] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [currentImageUrl, setCurrentImageUrl] = useState('');
+  const [details, setDetails] = useState<string[]>([]);
+  const [currentDetail, setCurrentDetail] = useState('');
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -29,6 +31,7 @@ export default function EditProductPage() {
       setProduct(p);
       if (p) {
         setImageUrls(p.images);
+        setDetails(p.details);
       }
     };
     fetchProduct();
@@ -43,6 +46,17 @@ export default function EditProductPage() {
 
   const handleRemoveImageUrl = (urlToRemove: string) => {
     setImageUrls(imageUrls.filter(url => url !== urlToRemove));
+  };
+  
+  const handleAddDetail = () => {
+    if (currentDetail && !details.includes(currentDetail)) {
+        setDetails([...details, currentDetail]);
+        setCurrentDetail('');
+    }
+  };
+
+  const handleRemoveDetail = (detailToRemove: string) => {
+    setDetails(details.filter(detail => detail !== detailToRemove));
   };
 
   if (!product) {
@@ -71,7 +85,7 @@ export default function EditProductPage() {
         discount: discountValue ? parseFloat(discountValue) : undefined,
         description: (document.getElementById('description') as HTMLTextAreaElement).value,
         images: imageUrls,
-        details: product.details,
+        details: details,
       };
 
       await updateProduct(product.id, updatedProduct);
@@ -136,11 +150,34 @@ export default function EditProductPage() {
                     />
                     <Button type="button" onClick={handleAddImageUrl}>Add Image</Button>
                 </div>
-                 <div className="space-y-2">
+                 <div className="space-y-2 mt-2">
                     {imageUrls.map((url, index) => (
                       <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md border bg-muted/50">
                         <span className="text-sm truncate">{url}</span>
                         <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveImageUrl(url)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                 </div>
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="details">Product Details</Label>
+                 <div className="flex items-center gap-2">
+                    <Input 
+                      id="details" 
+                      type="text" 
+                      placeholder="e.g. Pure Cotton" 
+                      value={currentDetail}
+                      onChange={(e) => setCurrentDetail(e.target.value)}
+                    />
+                    <Button type="button" onClick={handleAddDetail}>Add Detail</Button>
+                </div>
+                 <div className="space-y-2 mt-2">
+                    {details.map((detail, index) => (
+                      <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md border bg-muted/50">
+                        <span className="text-sm truncate">{detail}</span>
+                        <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveDetail(detail)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
