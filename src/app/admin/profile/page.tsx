@@ -8,8 +8,9 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { updateUserEmail, updateUserPassword } from '@/lib/auth-service';
+import { updateUserEmail, updateUserPassword, reauthenticate } from '@/lib/auth-service';
 import { Loader2 } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 export default function ProfilePage() {
     const { user } = useAuth();
@@ -18,6 +19,36 @@ export default function ProfilePage() {
     const [newPassword, setNewPassword] = useState('');
     const [emailLoading, setEmailLoading] = useState(false);
     const [passwordLoading, setPasswordLoading] = useState(false);
+
+    // State for re-authentication
+    const [reauthPassword, setReauthPassword] = useState('');
+    const [reauthAction, setReauthAction] = useState<(() => Promise<void>) | null>(null);
+    const [isReauthOpen, setIsReauthOpen] = useState(false);
+
+    const handleReauthAndExecute = async () => {
+        if (!user || !reauthAction) return;
+
+        try {
+            await reauthenticate(reauthPassword);
+            await reauthAction();
+        } catch (error: any) {
+            toast({
+                variant: 'destructive',
+                title: 'Authentication Failed',
+                description: 'The password you entered was incorrect. Please try again.',
+            });
+        } finally {
+            setIsReauthOpen(false);
+            setReauthPassword('');
+            setReauthAction(null);
+        }
+    };
+    
+    const triggerReauth = (action: () => Promise<void>) => {
+        setReauthAction(() => action);
+        setIsReauthOpen(true);
+    };
+
 
     const handleEmailChange = async () => {
         if (!user || !newEmail) return;
@@ -29,13 +60,16 @@ export default function ProfilePage() {
                 description: 'Your email has been successfully updated. Please re-login with your new email.',
             });
             setNewEmail('');
-            // Note: Firebase session will update, but you might want to force a re-login
         } catch (error: any) {
-            toast({
-                variant: 'destructive',
-                title: 'Error updating email',
-                description: error.message || 'Please re-authenticate and try again.',
-            });
+            if (error.code === 'auth/requires-recent-login') {
+                triggerReauth(handleEmailChange);
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error updating email',
+                    description: error.message || 'An unexpected error occurred.',
+                });
+            }
         } finally {
             setEmailLoading(false);
         }
@@ -62,17 +96,22 @@ export default function ProfilePage() {
             });
             setNewPassword('');
         } catch (error: any) {
-            toast({
-                variant: 'destructive',
-                title: 'Error updating password',
-                description: error.message || 'Please re-authenticate and try again.',
-            });
+             if (error.code === 'auth/requires-recent-login') {
+                triggerReauth(handlePasswordChange);
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error updating password',
+                    description: error.message || 'An unexpected error occurred.',
+                });
+            }
         } finally {
             setPasswordLoading(false);
         }
     };
 
     return (
+        <>
         <div className="grid gap-6">
             <Card>
                 <CardHeader>
@@ -109,7 +148,7 @@ export default function ProfilePage() {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button onClick={handleEmailChange} disabled={emailLoading || !newEmail}>
+                    <Button onClick={() => triggerReauth(handleEmailChange)} disabled={emailLoading || !newEmail}>
                         {emailLoading ? <Loader2 className="animate-spin" /> : 'Update Email'}
                     </Button>
                 </CardFooter>
@@ -133,11 +172,32 @@ export default function ProfilePage() {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button onClick={handlePasswordChange} disabled={passwordLoading || !newPassword}>
+                    <Button onClick={() => triggerReauth(handlePasswordChange)} disabled={passwordLoading || !newPassword}>
                          {passwordLoading ? <Loader2 className="animate-spin" /> : 'Update Password'}
                     </Button>
                 </CardFooter>
             </Card>
         </div>
+        <AlertDialog open={isReauthOpen} onOpenChange={setIsReauthOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Please Re-authenticate</AlertDialogTitle>
+                <AlertDialogDescription>
+                  For your security, please enter your current password to continue.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <Input
+                type="password"
+                placeholder="Your current password"
+                value={reauthPassword}
+                onChange={(e) => setReauthPassword(e.target.value)}
+              />
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setReauthAction(null)}>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleReauthAndExecute}>Confirm</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+      </>
     );
 }

@@ -7,7 +7,9 @@ import {
   User,
   sendPasswordResetEmail,
   updateEmail,
-  updatePassword
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider
 } from 'firebase/auth';
 import { auth } from './firebase';
 
@@ -58,6 +60,20 @@ export const getCurrentUser = (): Promise<User | null> => {
         });
     });
 };
+
+export const reauthenticate = async (password: string): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user || !user.email) {
+        throw new Error("No user is currently signed in or user email is not available.");
+    }
+    const credential = EmailAuthProvider.credential(user.email, password);
+    try {
+        await reauthenticateWithCredential(user, credential);
+    } catch (error) {
+        console.error("Re-authentication failed:", error);
+        throw error;
+    }
+}
 
 export const updateUserEmail = async (user: User, newEmail: string): Promise<void> => {
     try {
