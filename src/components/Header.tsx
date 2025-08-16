@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "./ui/button";
@@ -9,7 +10,7 @@ export default function Header() {
         <Link href="/" className="flex items-center gap-2">
           <ShoppingBag className="w-8 h-8 text-primary" />
           <span className="text-2xl font-bold font-headline text-primary">
-            PetalCart
+            PastelCart
           </span>
         </Link>
         <nav className="flex items-center gap-4">

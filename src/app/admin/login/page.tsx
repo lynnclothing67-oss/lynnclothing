@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
           <div className="flex justify-center items-center gap-2 mb-4">
             <ShoppingBag className="w-8 h-8 text-primary" />
             <span className="text-2xl font-bold font-headline text-primary">
-              PetalCart
+              PastelCart
             </span>
           </div>
           <CardTitle className="font-headline text-2xl">Admin Login</CardTitle>

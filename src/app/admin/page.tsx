@@ -16,7 +16,7 @@ export default function AdminDashboard() {
           <Link href="/" className="flex items-center gap-2">
               <ShoppingBag className="w-8 h-8 text-primary" />
               <span className="text-2xl font-bold font-headline text-primary">
-                PetalCart
+                PastelCart
               </span>
           </Link>
         </header>

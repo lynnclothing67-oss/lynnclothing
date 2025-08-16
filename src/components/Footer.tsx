@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
 
@@ -9,7 +10,7 @@ export default function Footer() {
           <div className="flex items-center gap-2">
             <ShoppingBag className="w-7 h-7 text-primary" />
             <span className="text-xl font-bold font-headline text-primary">
-              PetalCart
+              PastelCart
             </span>
           </div>
           <div className="flex gap-6 text-sm">
@@ -28,7 +29,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="text-center text-muted-foreground text-sm mt-8 pt-8 border-t">
-          <p>&copy; {new Date().getFullYear()} PetalCart. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} PastelCart. All rights reserved.</p>
         </div>
       </div>
     </footer>
