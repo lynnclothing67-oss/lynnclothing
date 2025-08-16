@@ -17,13 +17,13 @@ export default function ProductCard({ product }: ProductCardProps) {
     <Link href={`/products/${product.id}`}>
       <Card className="overflow-hidden h-full group transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-2 border-transparent hover:border-primary/20 bg-transparent">
         <CardContent className="p-0">
-          <div className="aspect-[3/4] overflow-hidden">
+          <div className="aspect-[3/4] overflow-hidden relative">
             <Image
               src={product.images[0]}
               alt={product.name}
-              width={600}
-              height={800}
-              className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
+              layout="fill"
+              objectFit="cover"
+              className="w-full h-full transition-transform duration-300 ease-in-out group-hover:scale-105"
               data-ai-hint={`${product.category} clothing`}
             />
           </div>
