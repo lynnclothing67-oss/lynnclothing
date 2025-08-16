@@ -11,7 +11,8 @@ import { AuthProvider } from "@/hooks/use-auth";
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAdminPath = pathname.startsWith('/admin');
+  const isAuthPage = pathname === '/admin/login';
+  const isAdminPath = pathname.startsWith('/admin') && !isAuthPage;
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -21,13 +22,15 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   if (!isClient) {
     return null; // Return null on the server and initial client render
   }
+  
+  const shouldShowHeaderFooter = !isAdminPath && !isAuthPage;
 
   return (
     <AuthProvider>
-      {!isAdminPath && <Header />}
+      {shouldShowHeaderFooter && <Header />}
       <main className="flex-grow">{children}</main>
-      {!isAdminPath && <Footer />}
-      {!isAdminPath && <WhatsAppButton />}
+      {shouldShowHeaderFooter && <Footer />}
+      {shouldShowHeaderFooter && <WhatsAppButton />}
       <Toaster />
     </AuthProvider>
   );

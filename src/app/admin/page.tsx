@@ -76,7 +76,6 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <Card>
          <CardHeader className="flex flex-row items-center justify-between">
             <div>
@@ -149,7 +148,5 @@ export default function AdminDashboard() {
             </Button>
         </CardFooter>
       </Card>
-    </main>
   );
 }
-

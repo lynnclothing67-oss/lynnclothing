@@ -2,7 +2,7 @@
 'use client';
 
 import { useAuth } from '@/hooks/use-auth';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -16,17 +16,24 @@ export default function AdminLayout({
 }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (!loading && !user) {
+    // If not loading, there's no user, and we are not on the login page, then redirect.
+    if (!loading && !user && pathname !== '/admin/login') {
       router.push('/admin/login');
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, pathname]);
   
   const handleLogout = async () => {
     await signOut();
     router.push('/admin/login');
   };
+  
+  // Render children directly if on the login page to avoid the loader/redirect flash
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
 
   if (loading) {
     return (
@@ -36,8 +43,10 @@ export default function AdminLayout({
     );
   }
 
+  // This check is important to prevent flashing the admin layout before redirecting.
+  // The useEffect will handle the redirect.
   if (!user) {
-    return null; // Or a login form, but we redirect anyway
+    return null;
   }
 
   return (
@@ -55,7 +64,9 @@ export default function AdminLayout({
             Logout
           </Button>
         </header>
-        {children}
+        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+            {children}
+        </main>
       </div>
     </div>
   );
