@@ -21,6 +21,7 @@ export const products: Product[] = [
     name: "Royal Blue Party Gown",
     category: "party wear 3 piece",
     price: 5999,
+    discount: 25,
     images: [
       "https://i.pinimg.com/564x/6c/5c/4b/6c5c4b57223b53f7c9e0a8ca184d08a2.jpg",
     ],
@@ -44,6 +45,7 @@ export const products: Product[] = [
     name: "Chic Western Dress",
     category: "western wear",
     price: 2499,
+    discount: 20,
     images: [
       "https://i.pinimg.com/564x/b8/18/d8/b818d8e58f0e52729a43a3d5377f7632.jpg",
       "https://i.pinimg.com/564x/d1/15/8d/d1158d60144d277a94a40f898a39d899.jpg",
@@ -56,8 +58,9 @@ export const products: Product[] = [
     name: "Classic Blue Jeans",
     category: "jeans",
     price: 1999,
+    discount: 5,
     images: [
-        "https://i.pinimg.com/564x/9a/9a/0f/9a9a0f0e0f0e0f0e0f0e0f0e0f0e0f0e.jpg",
+        "https://i.pinimg.com/564x/e4/b3/1f/e4b31f50426f8d389547b7c53e0d8cfe.jpg",
         "https://i.pinimg.com/564x/f3/f1/a0/f3f1a04386a4f89551c6e18b87123348.jpg"
     ],
     description: "A pair of classic and comfortable slim-fit blue jeans for a versatile look that never goes out of style.",
@@ -80,6 +83,7 @@ export const products: Product[] = [
     name: "Unstitched Silk Salwar Material",
     category: "salwar material",
     price: 2999,
+    discount: 18,
     images: [
         "https://i.pinimg.com/564x/3b/68/73/3b687353f4841961e685f0c727092895.jpg"
     ],
@@ -91,6 +95,7 @@ export const products: Product[] = [
     name: "Printed Cotton Running Material",
     category: "running materials",
     price: 399,
+    discount: 12,
     images: [
         "https://i.pinimg.com/564x/1e/8a/1c/1e8a1c3f9a7a9c8d5b1f9b3f3e1a0b16.jpg"
     ],
@@ -102,6 +107,7 @@ export const products: Product[] = [
     name: "Bandhani Print Dupatta",
     category: "duppattas",
     price: 799,
+    discount: 30,
     images: [
         "https://i.pinimg.com/564x/78/3c/6f/783c6f8f10820f4c6328a47814f3b142.jpg"
     ],
@@ -125,6 +131,7 @@ export const products: Product[] = [
     name: "Black Ruffle Top",
     category: "tops",
     price: 999,
+    discount: 15,
     images: [
         "https://i.pinimg.com/564x/2c/31/58/2c31589a1f736a4457e51c8b3552d430.jpg"
     ],
