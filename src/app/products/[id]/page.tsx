@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { ProductRecommendations } from "@/components/ProductRecommendations";
-import { Check, ShoppingCart, MessageSquare } from "lucide-react";
+import { Check, MessageSquare } from "lucide-react";
 
 type ProductPageProps = {
   params: {
@@ -67,10 +67,6 @@ export default function ProductPage({ params }: ProductPageProps) {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="w-full text-lg py-7">
-              <ShoppingCart className="mr-2" />
-              Add to Cart
-            </Button>
             <Button size="lg" variant="outline" className="w-full text-lg py-7" asChild>
               <Link href={whatsappUrl} target="_blank">
                 <MessageSquare className="mr-2" />
@@ -79,7 +75,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             </Button>
           </div>
           
-          <ProductRecommendations product={product} />
+          <ProductRecommendations currentProduct={product} />
         </div>
       </div>
     </div>
