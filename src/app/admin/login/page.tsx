@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { ShoppingBag, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-import { signIn, signUp } from '@/lib/auth-service';
+import { signIn } from '@/lib/auth-service';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
@@ -19,30 +19,19 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleAuthAction = async (action: 'login' | 'signup') => {
+  const handleLogin = async () => {
     setLoading(true);
     try {
-      if (action === 'login') {
-        await signIn(email, password);
-        toast({
-          title: 'Login Successful',
-          description: 'Welcome back!',
-        });
-        router.push('/admin');
-      } else {
-        await signUp(email, password);
-        toast({
-          title: 'Sign Up Successful',
-          description: 'Your account has been created. Please log in.',
-        });
-        // Clear fields after signup
-        setEmail('');
-        setPassword('');
-      }
+      await signIn(email, password);
+      toast({
+        title: 'Login Successful',
+        description: 'Welcome back!',
+      });
+      router.push('/admin');
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: action === 'login' ? 'Login Failed' : 'Sign Up Failed',
+        title: 'Login Failed',
         description: error.message || 'An unexpected error occurred.',
       });
     } finally {
@@ -61,7 +50,7 @@ export default function AdminLoginPage() {
             </span>
           </div>
           <CardTitle className="font-headline text-2xl">Admin Portal</CardTitle>
-          <CardDescription>Login or create an account to access the dashboard.</CardDescription>
+          <CardDescription>Enter your credentials to access the dashboard.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid w-full items-center gap-4">
@@ -90,14 +79,9 @@ export default function AdminLoginPage() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <div className="w-full flex gap-2">
-            <Button onClick={() => handleAuthAction('login')} className="w-full" disabled={loading}>
-              {loading ? <Loader2 className="animate-spin" /> : 'Login'}
-            </Button>
-            <Button onClick={() => handleAuthAction('signup')} className="w-full" variant="outline" disabled={loading}>
-              {loading ? <Loader2 className="animate-spin" /> : 'Sign Up'}
-            </Button>
-          </div>
+          <Button onClick={handleLogin} className="w-full" disabled={loading}>
+            {loading ? <Loader2 className="animate-spin" /> : 'Login'}
+          </Button>
            <Button variant="link" asChild>
                 <Link href="/">Back to Shop</Link>
             </Button>
