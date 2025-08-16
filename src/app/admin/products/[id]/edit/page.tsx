@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { Product } from '@/lib/types';
 import { getProduct, updateProduct } from '@/lib/products-service';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Trash2 } from 'lucide-react';
 
 export default function EditProductPage() {
   const router = useRouter();
@@ -20,14 +20,30 @@ export default function EditProductPage() {
   const { toast } = useToast();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [currentImageUrl, setCurrentImageUrl] = useState('');
 
   useEffect(() => {
     const fetchProduct = async () => {
       const p = await getProduct(params.id as string);
       setProduct(p);
+      if (p) {
+        setImageUrls(p.images);
+      }
     };
     fetchProduct();
   }, [params.id]);
+  
+  const handleAddImageUrl = () => {
+    if (currentImageUrl && !imageUrls.includes(currentImageUrl)) {
+      setImageUrls([...imageUrls, currentImageUrl]);
+      setCurrentImageUrl('');
+    }
+  };
+
+  const handleRemoveImageUrl = (urlToRemove: string) => {
+    setImageUrls(imageUrls.filter(url => url !== urlToRemove));
+  };
 
   if (!product) {
     return <div>Loading...</div>;
@@ -37,13 +53,11 @@ export default function EditProductPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const imageUrl = (document.getElementById('imageUrl') as HTMLInputElement).value;
-
-      if (!imageUrl) {
+      if (imageUrls.length === 0) {
         toast({
             variant: 'destructive',
             title: 'Image URL Required',
-            description: 'Please provide an image URL.',
+            description: 'Please add at least one image URL.',
         });
         setLoading(false);
         return;
@@ -54,7 +68,7 @@ export default function EditProductPage() {
         category: (document.getElementById('category') as HTMLInputElement).value,
         price: parseFloat((document.getElementById('price') as HTMLInputElement).value),
         description: (document.getElementById('description') as HTMLTextAreaElement).value,
-        images: [imageUrl],
+        images: imageUrls,
         details: product.details,
       };
 
@@ -103,8 +117,27 @@ export default function EditProductPage() {
                 <Textarea id="description" defaultValue={product.description} />
               </div>
                <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="imageUrl">Product Image URL</Label>
-                <Input id="imageUrl" type="text" defaultValue={product.images[0]} placeholder="https://example.com/image.png" required />
+                 <Label htmlFor="imageUrl">Product Image URLs</Label>
+                 <div className="flex items-center gap-2">
+                    <Input 
+                      id="imageUrl" 
+                      type="text" 
+                      placeholder="https://example.com/image.png" 
+                      value={currentImageUrl}
+                      onChange={(e) => setCurrentImageUrl(e.target.value)}
+                    />
+                    <Button type="button" onClick={handleAddImageUrl}>Add Image</Button>
+                </div>
+                 <div className="space-y-2">
+                    {imageUrls.map((url, index) => (
+                      <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md border bg-muted/50">
+                        <span className="text-sm truncate">{url}</span>
+                        <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveImageUrl(url)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                 </div>
               </div>
             </div>
           </form>
