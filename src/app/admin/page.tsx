@@ -56,7 +56,7 @@ export default function AdminDashboard() {
                       </TableCell>
                       <TableCell className="font-medium">{product.name}</TableCell>
                       <TableCell className="capitalize">{product.category}</TableCell>
-                      <TableCell>${product.price.toFixed(2)}</TableCell>
+                      <TableCell>₹{product.price.toFixed(2)}</TableCell>
                       <TableCell>
                          <DropdownMenu>
                             <DropdownMenuTrigger asChild>

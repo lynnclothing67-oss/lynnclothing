@@ -52,8 +52,8 @@ export default function EditProductPage() {
                 <Textarea id="description" defaultValue={product.description} />
               </div>
                <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="images">Image URL</Label>
-                <Input id="images" defaultValue={product.images[0]} />
+                <Label htmlFor="images">Product Image</Label>
+                <Input id="images" type="file" />
               </div>
             </div>
           </form>

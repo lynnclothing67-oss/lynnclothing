@@ -38,15 +38,15 @@ export default function NewProductPage() {
               </div>
                <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="price">Price</Label>
-                <Input id="price" type="number" placeholder="e.g. 75.00" required />
+                <Input id="price" type="number" placeholder="e.g. 5000.00" required />
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="description">Description</Label>
                 <Textarea id="description" placeholder="A light and airy floral sundress..." />
               </div>
                <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="images">Image URL</Label>
-                <Input id="images" placeholder="https://placehold.co/600x800.png" />
+                <Label htmlFor="images">Product Image</Label>
+                <Input id="images" type="file" />
               </div>
             </div>
           </form>

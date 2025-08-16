@@ -1,3 +1,4 @@
+
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -50,7 +51,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         <div className="flex flex-col gap-6">
           <Badge variant="secondary" className="w-fit capitalize">{product.category}</Badge>
           <h1 className="font-headline text-4xl md:text-5xl font-bold">{product.name}</h1>
-          <p className="text-3xl font-semibold text-primary">${product.price.toFixed(2)}</p>
+          <p className="text-3xl font-semibold text-primary">₹{product.price.toFixed(2)}</p>
           <p className="text-muted-foreground leading-relaxed">{product.description}</p>
           
           <div>
