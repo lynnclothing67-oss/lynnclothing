@@ -20,6 +20,13 @@ export default function EditProductPage() {
   const { toast } = useToast();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
+  
+  // Component state for controlled inputs
+  const [name, setName] = useState('');
+  const [category, setCategory] = useState('');
+  const [price, setPrice] = useState('');
+  const [discount, setDiscount] = useState('');
+  const [description, setDescription] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [currentImageUrl, setCurrentImageUrl] = useState('');
   const [details, setDetails] = useState<string[]>([]);
@@ -27,11 +34,18 @@ export default function EditProductPage() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const p = await getProduct(params.id as string);
-      setProduct(p);
-      if (p) {
-        setImageUrls(p.images);
-        setDetails(p.details);
+      if (params.id) {
+        const p = await getProduct(params.id as string);
+        setProduct(p);
+        if (p) {
+          setName(p.name);
+          setCategory(p.category);
+          setPrice(p.price.toString());
+          setDiscount(p.discount?.toString() || '');
+          setDescription(p.description);
+          setImageUrls(p.images);
+          setDetails(p.details);
+        }
       }
     };
     fetchProduct();
@@ -79,8 +93,7 @@ export default function EditProductPage() {
     return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
   }
   
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
     try {
       if (imageUrls.length === 0) {
@@ -93,13 +106,12 @@ export default function EditProductPage() {
         return;
       }
 
-      const discountValue = (document.getElementById('discount') as HTMLInputElement).value;
       const updatedProduct: Partial<Product> = {
-        name: (document.getElementById('name') as HTMLInputElement).value,
-        category: (document.getElementById('category') as HTMLInputElement).value,
-        price: parseFloat((document.getElementById('price') as HTMLInputElement).value),
-        discount: discountValue ? parseFloat(discountValue) : undefined,
-        description: (document.getElementById('description') as HTMLTextAreaElement).value,
+        name,
+        category,
+        price: parseFloat(price),
+        discount: discount ? parseFloat(discount) : undefined,
+        description,
         images: imageUrls,
         details: details,
       };
@@ -130,90 +142,88 @@ export default function EditProductPage() {
           <CardDescription>Update the details for {product.name}.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Product Name</Label>
-                <Input id="name" defaultValue={product.name} required />
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="category">Category</Label>
-                <Input id="category" defaultValue={product.category} required />
-              </div>
-               <div className="grid grid-cols-2 gap-4">
-                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="price">Price</Label>
-                  <Input id="price" type="number" step="0.01" defaultValue={product.price} required />
-                </div>
-                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="discount">Discount (%)</Label>
-                  <Input id="discount" type="number" step="0.01" defaultValue={product.discount} placeholder="e.g. 10" />
-                </div>
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="description">Description</Label>
-                <Textarea id="description" defaultValue={product.description} />
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="name">Product Name</Label>
+              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="category">Category</Label>
+              <Input id="category" value={category} onChange={(e) => setCategory(e.target.value)} required />
+            </div>
+             <div className="grid grid-cols-2 gap-4">
+               <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="price">Price</Label>
+                <Input id="price" type="number" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} required />
               </div>
                <div className="flex flex-col space-y-1.5">
-                 <Label htmlFor="imageUrl">Product Image URLs</Label>
-                 <div className="flex items-center gap-2">
-                    <Input 
-                      id="imageUrl" 
-                      type="text" 
-                      placeholder="https://example.com/image.png" 
-                      value={currentImageUrl}
-                      onChange={(e) => setCurrentImageUrl(e.target.value)}
-                       onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            e.preventDefault();
-                            handleAddImageUrl();
-                          }
-                        }}
-                    />
-                    <Button type="button" onClick={handleAddImageUrl}>Add Image</Button>
-                </div>
-                 <div className="space-y-2 mt-2">
-                    {imageUrls.map((url, index) => (
-                      <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md border bg-muted/50">
-                        <span className="text-sm truncate">{url}</span>
-                        <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveImageUrl(url)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                 </div>
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="details">Product Details</Label>
-                 <div className="flex items-center gap-2">
-                    <Input 
-                      id="details" 
-                      type="text" 
-                      placeholder="e.g. Pure Cotton" 
-                      value={currentDetail}
-                      onChange={(e) => setCurrentDetail(e.target.value)}
-                       onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          handleAddDetail();
-                        }
-                      }}
-                    />
-                    <Button type="button" onClick={handleAddDetail}>Add Detail</Button>
-                </div>
-                 <div className="space-y-2 mt-2">
-                    {details.map((detail, index) => (
-                      <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md border bg-muted/50">
-                        <span className="text-sm truncate">{detail}</span>
-                        <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveDetail(detail)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))}
-                 </div>
+                <Label htmlFor="discount">Discount (%)</Label>
+                <Input id="discount" type="number" step="0.01" value={discount} onChange={(e) => setDiscount(e.target.value)} placeholder="e.g. 10" />
               </div>
             </div>
-          </form>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="description">Description</Label>
+              <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+            </div>
+             <div className="flex flex-col space-y-1.5">
+               <Label htmlFor="imageUrl">Product Image URLs</Label>
+               <div className="flex items-center gap-2">
+                  <Input 
+                    id="imageUrl" 
+                    type="text" 
+                    placeholder="https://example.com/image.png" 
+                    value={currentImageUrl}
+                    onChange={(e) => setCurrentImageUrl(e.target.value)}
+                     onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddImageUrl();
+                        }
+                      }}
+                  />
+                  <Button type="button" onClick={handleAddImageUrl}>Add Image</Button>
+              </div>
+               <div className="space-y-2 mt-2">
+                  {imageUrls.map((url, index) => (
+                    <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md border bg-muted/50">
+                      <span className="text-sm truncate">{url}</span>
+                      <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveImageUrl(url)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+               </div>
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="details">Product Details</Label>
+               <div className="flex items-center gap-2">
+                  <Input 
+                    id="details" 
+                    type="text" 
+                    placeholder="e.g. Pure Cotton" 
+                    value={currentDetail}
+                    onChange={(e) => setCurrentDetail(e.target.value)}
+                     onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddDetail();
+                      }
+                    }}
+                  />
+                  <Button type="button" onClick={handleAddDetail}>Add Detail</Button>
+              </div>
+               <div className="space-y-2 mt-2">
+                  {details.map((detail, index) => (
+                    <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md border bg-muted/50">
+                      <span className="text-sm truncate">{detail}</span>
+                      <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveDetail(detail)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+               </div>
+            </div>
+          </div>
         </CardContent>
         <CardFooter className="flex justify-between">
            <Button variant="ghost" asChild>
