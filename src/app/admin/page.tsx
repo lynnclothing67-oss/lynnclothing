@@ -1,14 +1,47 @@
 
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { products } from '@/lib/products';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal, PlusCircle, ShoppingBag } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Product } from '@/lib/types';
+import { deleteProduct, getProducts } from '@/lib/products-service';
+import { useToast } from '@/hooks/use-toast';
 
 export default function AdminDashboard() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const products = await getProducts();
+      setProducts(products);
+    };
+    fetchProducts();
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteProduct(id);
+      setProducts(products.filter((p) => p.id !== id));
+      toast({
+        title: 'Product Deleted',
+        description: 'The product has been successfully deleted.',
+      });
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'There was an error deleting the product.',
+      });
+    }
+  };
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-secondary/50">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
@@ -67,7 +100,7 @@ export default function AdminDashboard() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem asChild><Link href={`/admin/products/${product.id}/edit`}>Edit</Link></DropdownMenuItem>
-                              <DropdownMenuItem>Delete</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleDelete(product.id)}>Delete</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                       </TableCell>

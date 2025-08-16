@@ -1,25 +1,37 @@
 
-import { notFound } from "next/navigation";
+'use client';
+
+import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { ProductRecommendations } from "@/components/ProductRecommendations";
 import { Check, MessageSquare } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Product } from "@/lib/types";
+import { getProduct } from "@/lib/products-service";
 
-type ProductPageProps = {
-  params: {
-    id: string;
-  };
-};
+export default function ProductPage() {
+  const params = useParams();
+  const [product, setProduct] = useState<Product | null>(null);
+  
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const p = await getProduct(params.id as string);
+      setProduct(p);
+    };
 
-export default function ProductPage({ params }: ProductPageProps) {
-  const product = products.find((p) => p.id === params.id);
+    if (params.id) {
+      fetchProduct();
+    }
+  }, [params.id]);
+
 
   if (!product) {
-    notFound();
+    // TODO: A notFound() call here causes a build-time error.
+    return <div>Loading...</div>;
   }
 
   const whatsappMessage = `Hi, I'm interested in this product: ${product.name}`;

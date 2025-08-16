@@ -1,12 +1,32 @@
+
+'use client';
+
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/ProductCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useEffect, useState } from "react";
+import { Product } from "@/lib/types";
+import { getProducts } from "@/lib/products-service";
 
 export default function Home() {
-  const categories = [...new Set(products.map((p) => p.category))];
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const fetchedProducts = await getProducts();
+      setProducts(fetchedProducts);
+      const uniqueCategories = [...new Set(fetchedProducts.map((p) => p.category))];
+      setCategories(uniqueCategories);
+    };
+    fetchProducts();
+  }, []);
+
+  if (!products.length) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

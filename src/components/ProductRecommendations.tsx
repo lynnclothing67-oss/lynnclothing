@@ -1,16 +1,28 @@
 
 'use client';
 
-import { products } from '@/lib/products';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Sparkles } from 'lucide-react';
 import type { Product } from '@/lib/types';
 import ProductCard from './ProductCard';
+import { useEffect, useState } from 'react';
+import { getProducts } from '@/lib/products-service';
 
 export function ProductRecommendations({ currentProduct }: { currentProduct: Product }) {
-  const recommendedProducts = products.filter(
-    (p) => p.category === currentProduct.category && p.id !== currentProduct.id
-  ).slice(0, 4); // Show up to 4 recommendations
+  const [recommendedProducts, setRecommendedProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      const allProducts = await getProducts();
+      const recommendations = allProducts.filter(
+        (p) => p.category === currentProduct.category && p.id !== currentProduct.id
+      ).slice(0, 4);
+      setRecommendedProducts(recommendations);
+    };
+
+    fetchRecommendations();
+  }, [currentProduct]);
+
 
   if (recommendedProducts.length === 0) {
     return null;

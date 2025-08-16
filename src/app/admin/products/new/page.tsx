@@ -8,14 +8,57 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
+import { useState } from 'react';
+import { addProduct, uploadImage } from '@/lib/products-service';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
+import type { Product } from '@/lib/types';
 
 export default function NewProductPage() {
   const router = useRouter();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Logic to create a new product would go here
-    router.push('/admin');
+    if (!imageFile) {
+      toast({
+        variant: 'destructive',
+        title: 'Image Required',
+        description: 'Please upload a product image.',
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const imageUrl = await uploadImage(imageFile);
+      const newProduct: Omit<Product, 'id'> = {
+        name: (document.getElementById('name') as HTMLInputElement).value,
+        category: (document.getElementById('category') as HTMLInputElement).value,
+        price: parseFloat((document.getElementById('price') as HTMLInputElement).value),
+        description: (document.getElementById('description') as HTMLTextAreaElement).value,
+        images: [imageUrl],
+        details: [], // Add logic to collect details if needed
+      };
+
+      await addProduct(newProduct);
+      toast({
+        title: 'Product Created',
+        description: 'The new product has been successfully added.',
+      });
+      router.push('/admin');
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'There was an error creating the product.',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,7 +89,7 @@ export default function NewProductPage() {
               </div>
                <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="images">Product Image</Label>
-                <Input id="images" type="file" />
+                <Input id="images" type="file" onChange={(e) => setImageFile(e.target.files?.[0] || null)} required />
               </div>
             </div>
           </form>
@@ -55,7 +98,9 @@ export default function NewProductPage() {
            <Button variant="ghost" asChild>
                 <Link href="/admin">Cancel</Link>
            </Button>
-          <Button onClick={handleSubmit}>Create Product</Button>
+          <Button onClick={handleSubmit} disabled={loading}>
+            {loading ? <Loader2 className="animate-spin" /> : 'Create Product'}
+          </Button>
         </CardFooter>
       </Card>
     </div>

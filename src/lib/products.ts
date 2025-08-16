@@ -1,5 +1,7 @@
+
 import type { Product } from "./types";
 
+// This file is now a fallback or for seeding, and is no longer the primary data source.
 export const products: Product[] = [
   {
     id: "1",
