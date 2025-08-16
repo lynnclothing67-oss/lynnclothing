@@ -22,6 +22,9 @@ export default function Footer() {
             <Link href="#" className="hover:text-primary transition-colors">
               Privacy Policy
             </Link>
+            <Link href="/admin/login" className="hover:text-primary transition-colors">
+              Admin
+            </Link>
           </div>
         </div>
         <div className="text-center text-muted-foreground text-sm mt-8 pt-8 border-t">
