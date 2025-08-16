@@ -11,14 +11,15 @@ import { useEffect, useState } from "react";
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdminPath = pathname.startsWith('/admin');
-  const [isClient, setIsClient] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    setIsMounted(true);
   }, []);
 
-  if (!isClient) {
-    // Return a placeholder or null on the server to avoid mismatches
+  if (!isMounted) {
+    // On the server, and during the initial client render, return a placeholder or null.
+    // This prevents the hydration mismatch.
     return null;
   }
 
