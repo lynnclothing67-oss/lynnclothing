@@ -51,6 +51,7 @@ export default function NewProductPage() {
       });
       router.push('/admin');
     } catch (error) {
+      console.error("Error creating product:", error);
       toast({
         variant: 'destructive',
         title: 'Error',
@@ -98,7 +99,7 @@ export default function NewProductPage() {
            <Button variant="ghost" asChild>
                 <Link href="/admin">Cancel</Link>
            </Button>
-          <Button onClick={handleSubmit} disabled={loading}>
+          <Button onClick={handleSubmit} disabled={loading} type="button">
             {loading ? <Loader2 className="animate-spin" /> : 'Create Product'}
           </Button>
         </CardFooter>
