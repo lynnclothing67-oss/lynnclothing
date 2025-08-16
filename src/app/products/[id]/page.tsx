@@ -52,8 +52,9 @@ export default function ProductPage() {
                   <Image
                     src={img}
                     alt={`${product.name} - view ${index + 1}`}
-                    layout="fill"
-                    objectFit="cover"
+                    width={800}
+                    height={1067}
+                    className="w-full h-full object-cover"
                     data-ai-hint={`${product.category} product`}
                   />
                    {product.discount && (
