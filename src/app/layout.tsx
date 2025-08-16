@@ -10,6 +10,20 @@ export const metadata: Metadata = {
   description: "A responsive e-commerce platform for women's clothing.",
 };
 
+function BodyContent({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow">{children}</main>
+        <Footer />
+      </div>
+      <WhatsAppButton />
+      <Toaster />
+    </>
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -23,13 +37,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </div>
-        <WhatsAppButton />
-        <Toaster />
+        <BodyContent>{children}</BodyContent>
       </body>
     </html>
   );
