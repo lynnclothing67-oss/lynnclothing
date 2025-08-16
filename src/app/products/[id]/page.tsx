@@ -22,7 +22,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   }
 
   const whatsappMessage = `Hi, I'm interested in this product: ${product.name}`;
-  const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = `https://wa.me/7907963091?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
     <div className="container mx-auto px-4 py-12">
