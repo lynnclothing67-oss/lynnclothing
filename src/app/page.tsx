@@ -9,17 +9,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import { Product } from "@/lib/types";
 import { getProducts } from "@/lib/products-service";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const fetchedProducts = await getProducts();
-        setProducts(fetchedProducts);
+        setAllProducts(fetchedProducts);
+        setFilteredProducts(fetchedProducts);
         const uniqueCategories = [...new Set(fetchedProducts.map((p) => p.category))];
         setCategories(uniqueCategories);
       } catch (error) {
@@ -30,6 +35,17 @@ export default function Home() {
     };
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    const lowercasedQuery = searchQuery.toLowerCase();
+    const results = allProducts.filter(product =>
+      product.name.toLowerCase().includes(lowercasedQuery) ||
+      product.category.toLowerCase().includes(lowercasedQuery) ||
+      product.description.toLowerCase().includes(lowercasedQuery)
+    );
+    setFilteredProducts(results);
+  }, [searchQuery, allProducts]);
+
 
   if (loading) {
     return <div>Loading...</div>
@@ -63,8 +79,20 @@ export default function Home() {
       </section>
 
       <section id="collections">
+        <div className="mb-8 flex justify-center">
+            <div className="relative w-full max-w-md">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input 
+                    type="search"
+                    placeholder="Search for products..."
+                    className="pl-10 w-full"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+            </div>
+        </div>
         <Tabs defaultValue={categories[0]} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 bg-transparent p-0 gap-2 mb-8">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-5 bg-transparent p-0 gap-2 mb-8">
             {categories.map((category) => (
               <TabsTrigger
                 key={category}
@@ -79,7 +107,7 @@ export default function Home() {
           {categories.map((category) => (
             <TabsContent key={category} value={category}>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {products
+                {filteredProducts
                   .filter((p) => p.category === category)
                   .map((product) => (
                     <ProductCard key={product.id} product={product} />
@@ -88,6 +116,20 @@ export default function Home() {
             </TabsContent>
           ))}
         </Tabs>
+         {searchQuery && (
+          <div className="mt-12">
+            <h2 className="font-headline text-3xl font-bold text-center mb-8">Search Results for "{searchQuery}"</h2>
+            {filteredProducts.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-muted-foreground">No products found matching your search.</p>
+            )}
+          </div>
+        )}
       </section>
     </div>
   );
