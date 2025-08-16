@@ -201,9 +201,7 @@ export default function EditProductPage() {
                     </div>
                   ) : imageUrls.map((url, index) => (
                     <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md bg-muted/50 text-sm">
-                      <div className="flex-1 min-w-0">
-                        <span className="truncate block">{url}</span>
-                      </div>
+                      <p className="flex-1 truncate">{url}</p>
                       <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveImageUrl(url)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -237,9 +235,7 @@ export default function EditProductPage() {
                     </div>
                   ) : details.map((detail, index) => (
                     <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md bg-muted/50 text-sm">
-                      <div className="flex-1 min-w-0">
-                        <span className="truncate block">{detail}</span>
-                      </div>
+                      <p className="flex-1 truncate">{detail}</p>
                       <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveDetail(detail)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
