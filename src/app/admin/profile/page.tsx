@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserEmail, updateUserPassword, reauthenticate } from '@/lib/auth-service';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 export default function ProfilePage() {
@@ -24,6 +24,11 @@ export default function ProfilePage() {
     const [reauthPassword, setReauthPassword] = useState('');
     const [reauthAction, setReauthAction] = useState<(() => Promise<void>) | null>(null);
     const [isReauthOpen, setIsReauthOpen] = useState(false);
+
+    // State for password visibility
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showReauthPassword, setShowReauthPassword] = useState(false);
+
 
     const handleReauthAndExecute = async () => {
         if (!user || !reauthAction) return;
@@ -162,13 +167,24 @@ export default function ProfilePage() {
                 <CardContent>
                     <div className="flex flex-col space-y-1.5">
                         <Label htmlFor="new-password">New Password</Label>
-                        <Input 
-                            id="new-password" 
-                            type="password" 
-                            placeholder="••••••••" 
-                             value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
+                        <div className="relative">
+                            <Input 
+                                id="new-password" 
+                                type={showNewPassword ? "text" : "password"}
+                                placeholder="••••••••" 
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                            />
+                            <Button 
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="absolute inset-y-0 right-0 h-full px-3"
+                                onClick={() => setShowNewPassword(!showNewPassword)}
+                            >
+                                {showNewPassword ? <EyeOff /> : <Eye />}
+                            </Button>
+                        </div>
                     </div>
                 </CardContent>
                 <CardFooter>
@@ -186,12 +202,23 @@ export default function ProfilePage() {
                   For your security, please enter your current password to continue.
                 </AlertDialogDescription>
               </AlertDialogHeader>
-              <Input
-                type="password"
-                placeholder="Your current password"
-                value={reauthPassword}
-                onChange={(e) => setReauthPassword(e.target.value)}
-              />
+               <div className="relative">
+                <Input
+                    type={showReauthPassword ? "text" : "password"}
+                    placeholder="Your current password"
+                    value={reauthPassword}
+                    onChange={(e) => setReauthPassword(e.target.value)}
+                />
+                 <Button 
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute inset-y-0 right-0 h-full px-3"
+                    onClick={() => setShowReauthPassword(!showReauthPassword)}
+                >
+                    {showReauthPassword ? <EyeOff /> : <Eye />}
+                </Button>
+              </div>
               <AlertDialogFooter>
                 <AlertDialogCancel onClick={() => setReauthAction(null)}>Cancel</AlertDialogCancel>
                 <AlertDialogAction onClick={handleReauthAndExecute}>Confirm</AlertDialogAction>
