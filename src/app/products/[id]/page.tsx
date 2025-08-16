@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { products } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { ProductRecommendations } from "@/components/ProductRecommendations";
-import { Check } from "lucide-react";
+import { Check, ShoppingCart, MessageSquare } from "lucide-react";
 
 type ProductPageProps = {
   params: {
@@ -19,6 +20,9 @@ export default function ProductPage({ params }: ProductPageProps) {
   if (!product) {
     notFound();
   }
+
+  const whatsappMessage = `Hi, I'm interested in this product: ${product.name}`;
+  const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -61,7 +65,18 @@ export default function ProductPage({ params }: ProductPageProps) {
             </ul>
           </div>
 
-          <Button size="lg" className="w-full text-lg py-7">Add to Cart</Button>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button size="lg" className="w-full text-lg py-7">
+              <ShoppingCart className="mr-2" />
+              Add to Cart
+            </Button>
+            <Button size="lg" variant="outline" className="w-full text-lg py-7" asChild>
+              <Link href={whatsappUrl} target="_blank">
+                <MessageSquare className="mr-2" />
+                Buy Now
+              </Link>
+            </Button>
+          </div>
           
           <ProductRecommendations product={product} />
         </div>
