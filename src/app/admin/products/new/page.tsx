@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
 import { useState } from 'react';
-import { addProduct, uploadImage } from '@/lib/products-service';
+import { addProduct } from '@/lib/products-service';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import type { Product } from '@/lib/types';
@@ -18,15 +18,15 @@ export default function NewProductPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!imageFile) {
+    const imageUrl = (document.getElementById('imageUrl') as HTMLInputElement).value;
+    if (!imageUrl) {
       toast({
         variant: 'destructive',
-        title: 'Image Required',
-        description: 'Please upload a product image.',
+        title: 'Image URL Required',
+        description: 'Please provide an image URL.',
       });
       return;
     }
@@ -34,7 +34,6 @@ export default function NewProductPage() {
     setLoading(true);
 
     try {
-      const imageUrl = await uploadImage(imageFile);
       const newProduct: Omit<Product, 'id'> = {
         name: (document.getElementById('name') as HTMLInputElement).value,
         category: (document.getElementById('category') as HTMLInputElement).value,
@@ -89,8 +88,8 @@ export default function NewProductPage() {
                 <Textarea id="description" placeholder="A light and airy floral sundress..." />
               </div>
                <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="images">Product Image</Label>
-                <Input id="images" type="file" onChange={(e) => setImageFile(e.target.files?.[0] || null)} required />
+                <Label htmlFor="imageUrl">Product Image URL</Label>
+                <Input id="imageUrl" type="text" placeholder="https://example.com/image.png" required />
               </div>
             </div>
           </form>

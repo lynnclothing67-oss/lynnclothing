@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Product } from '@/lib/types';
-import { getProduct, updateProduct, uploadImage } from '@/lib/products-service';
+import { getProduct, updateProduct } from '@/lib/products-service';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
@@ -20,7 +20,6 @@ export default function EditProductPage() {
   const { toast } = useToast();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -38,9 +37,16 @@ export default function EditProductPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      let imageUrl = product.images[0];
-      if (imageFile) {
-        imageUrl = await uploadImage(imageFile);
+      const imageUrl = (document.getElementById('imageUrl') as HTMLInputElement).value;
+
+      if (!imageUrl) {
+        toast({
+            variant: 'destructive',
+            title: 'Image URL Required',
+            description: 'Please provide an image URL.',
+        });
+        setLoading(false);
+        return;
       }
 
       const updatedProduct: Partial<Product> = {
@@ -49,7 +55,7 @@ export default function EditProductPage() {
         price: parseFloat((document.getElementById('price') as HTMLInputElement).value),
         description: (document.getElementById('description') as HTMLTextAreaElement).value,
         images: [imageUrl],
-        details: product.details, // Assuming details are not editable in this form
+        details: product.details,
       };
 
       await updateProduct(product.id, updatedProduct);
@@ -97,8 +103,8 @@ export default function EditProductPage() {
                 <Textarea id="description" defaultValue={product.description} />
               </div>
                <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="images">Product Image</Label>
-                <Input id="images" type="file" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
+                <Label htmlFor="imageUrl">Product Image URL</Label>
+                <Input id="imageUrl" type="text" defaultValue={product.images[0]} placeholder="https://example.com/image.png" required />
               </div>
             </div>
           </form>
