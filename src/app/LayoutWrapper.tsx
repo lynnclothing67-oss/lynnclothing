@@ -17,11 +17,14 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
     setIsClient(true);
   }, []);
 
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
       {!isAdminPath && <Header />}
-      <main className="flex-grow">{isClient ? children: null}</main>
+      <main className="flex-grow">{children}</main>
       {!isAdminPath && <Footer />}
       {!isAdminPath && <WhatsAppButton />}
       <Toaster />

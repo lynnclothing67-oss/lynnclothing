@@ -13,18 +13,25 @@ import { getProducts } from "@/lib/products-service";
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const fetchedProducts = await getProducts();
-      setProducts(fetchedProducts);
-      const uniqueCategories = [...new Set(fetchedProducts.map((p) => p.category))];
-      setCategories(uniqueCategories);
+      try {
+        const fetchedProducts = await getProducts();
+        setProducts(fetchedProducts);
+        const uniqueCategories = [...new Set(fetchedProducts.map((p) => p.category))];
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchProducts();
   }, []);
 
-  if (!products.length) {
+  if (loading) {
     return <div>Loading...</div>
   }
 
