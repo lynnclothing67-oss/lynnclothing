@@ -18,8 +18,9 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   }, []);
 
   if (!isMounted) {
-    // On the server, and during the initial client render, return a placeholder or null.
-    // This prevents the hydration mismatch.
+    // On the server, and during the initial client render, return null.
+    // This prevents the hydration mismatch by ensuring the client-only components
+    // are not part of the initial render.
     return null;
   }
 
