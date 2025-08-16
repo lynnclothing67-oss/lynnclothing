@@ -11,23 +11,23 @@ import { useEffect, useState } from "react";
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdminPath = pathname.startsWith('/admin');
-  const [isMounted, setIsMounted] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
+    setIsClient(true);
   }, []);
 
-  if (!isMounted) {
+  if (!isClient) {
     return null;
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <>
       {!isAdminPath && <Header />}
       <main className="flex-grow">{children}</main>
       {!isAdminPath && <Footer />}
       {!isAdminPath && <WhatsAppButton />}
       <Toaster />
-    </div>
+    </>
   );
 }
