@@ -38,7 +38,8 @@ export async function deleteProduct(id: string): Promise<void> {
 
 export async function uploadImage(file: File): Promise<string> {
   const storageRef = ref(storage, `products/${Date.now()}_${file.name}`);
-  await uploadBytes(storageRef, file);
+  const metadata = { contentType: file.type };
+  await uploadBytes(storageRef, file, metadata);
   const downloadURL = await getDownloadURL(storageRef);
   return downloadURL;
 }
