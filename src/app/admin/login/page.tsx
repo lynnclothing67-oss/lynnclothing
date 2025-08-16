@@ -10,7 +10,8 @@ import { Label } from '@/components/ui/label';
 import { ShoppingBag, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
-import { signIn } from '@/lib/auth-service';
+import { signIn, sendPasswordReset } from '@/lib/auth-service';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
@@ -18,6 +19,7 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const [resetEmail, setResetEmail] = useState('');
 
   const handleLogin = async () => {
     setLoading(true);
@@ -36,6 +38,30 @@ export default function AdminLoginPage() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+  
+  const handlePasswordReset = async () => {
+    if (!resetEmail) {
+      toast({
+        variant: 'destructive',
+        title: 'Email required',
+        description: 'Please enter your email address to reset your password.',
+      });
+      return;
+    }
+    try {
+      await sendPasswordReset(resetEmail);
+      toast({
+        title: 'Password Reset Email Sent',
+        description: 'Check your inbox for a link to reset your password.',
+      });
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error.message || 'Could not send password reset email.',
+      });
     }
   };
 
@@ -82,9 +108,35 @@ export default function AdminLoginPage() {
           <Button onClick={handleLogin} className="w-full" disabled={loading}>
             {loading ? <Loader2 className="animate-spin" /> : 'Login'}
           </Button>
-           <Button variant="link" asChild>
+
+          <div className="flex justify-between w-full">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="link" className="p-0 h-auto">Forgot Password?</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Reset Password</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Enter your email address and we'll send you a link to reset your password.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <Input
+                  type="email"
+                  placeholder="your-email@example.com"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                />
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handlePasswordReset}>Send Reset Link</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <Button variant="link" asChild className="p-0 h-auto">
                 <Link href="/">Back to Shop</Link>
             </Button>
+          </div>
         </CardFooter>
       </Card>
     </div>

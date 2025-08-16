@@ -4,7 +4,8 @@ import {
   signOut as firebaseSignOut,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-  User
+  User,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { auth } from './firebase';
 
@@ -36,6 +37,16 @@ export const signUp = async (email, password) => {
         throw error;
     }
 }
+
+export const sendPasswordReset = async (email: string): Promise<void> => {
+    try {
+        await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+        console.error("Error sending password reset email:", error);
+        throw error;
+    }
+};
+
 
 export const getCurrentUser = (): Promise<User | null> => {
     return new Promise((resolve) => {
