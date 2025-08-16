@@ -38,9 +38,25 @@ export default function EditProductPage() {
   }, [params.id]);
   
   const handleAddImageUrl = () => {
-    if (currentImageUrl && !imageUrls.includes(currentImageUrl)) {
-      setImageUrls([...imageUrls, currentImageUrl]);
+    if (currentImageUrl.trim() && !imageUrls.includes(currentImageUrl.trim())) {
+      setImageUrls([...imageUrls, currentImageUrl.trim()]);
       setCurrentImageUrl('');
+      toast({
+        title: 'Image URL Added',
+        description: 'The image URL has been successfully added.',
+      });
+    } else if (!currentImageUrl.trim()) {
+        toast({
+            variant: 'destructive',
+            title: 'Empty URL',
+            description: 'Please enter an image URL.',
+        });
+    } else {
+        toast({
+            variant: 'destructive',
+            title: 'Duplicate URL',
+            description: 'This image URL has already been added.',
+        });
     }
   };
 
@@ -49,8 +65,8 @@ export default function EditProductPage() {
   };
   
   const handleAddDetail = () => {
-    if (currentDetail && !details.includes(currentDetail)) {
-        setDetails([...details, currentDetail]);
+    if (currentDetail.trim() && !details.includes(currentDetail.trim())) {
+        setDetails([...details, currentDetail.trim()]);
         setCurrentDetail('');
     }
   };
@@ -60,7 +76,7 @@ export default function EditProductPage() {
   };
 
   if (!product) {
-    return <div>Loading...</div>;
+    return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
   }
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -127,11 +143,11 @@ export default function EditProductPage() {
                <div className="grid grid-cols-2 gap-4">
                  <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="price">Price</Label>
-                  <Input id="price" type="number" defaultValue={product.price} required />
+                  <Input id="price" type="number" step="0.01" defaultValue={product.price} required />
                 </div>
                  <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="discount">Discount (%)</Label>
-                  <Input id="discount" type="number" defaultValue={product.discount} placeholder="e.g. 10" />
+                  <Input id="discount" type="number" step="0.01" defaultValue={product.discount} placeholder="e.g. 10" />
                 </div>
               </div>
               <div className="flex flex-col space-y-1.5">
@@ -147,6 +163,12 @@ export default function EditProductPage() {
                       placeholder="https://example.com/image.png" 
                       value={currentImageUrl}
                       onChange={(e) => setCurrentImageUrl(e.target.value)}
+                       onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleAddImageUrl();
+                          }
+                        }}
                     />
                     <Button type="button" onClick={handleAddImageUrl}>Add Image</Button>
                 </div>
@@ -170,6 +192,12 @@ export default function EditProductPage() {
                       placeholder="e.g. Pure Cotton" 
                       value={currentDetail}
                       onChange={(e) => setCurrentDetail(e.target.value)}
+                       onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddDetail();
+                        }
+                      }}
                     />
                     <Button type="button" onClick={handleAddDetail}>Add Detail</Button>
                 </div>
