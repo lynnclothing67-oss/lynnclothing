@@ -123,7 +123,7 @@ export default function AdminDashboard() {
                           height="64"
                           src={product.images[0]}
                           width="64"
-                          data-ai-hint="clothing item"
+                          data-ai-hint={`${product.category} clothing`}
                         />
                       </TableCell>
                       <TableCell className="font-medium">{product.name}</TableCell>

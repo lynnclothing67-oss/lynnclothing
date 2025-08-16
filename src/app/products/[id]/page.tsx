@@ -54,7 +54,7 @@ export default function ProductPage() {
                     alt={`${product.name} - view ${index + 1}`}
                     layout="fill"
                     objectFit="cover"
-                    data-ai-hint="woman model"
+                    data-ai-hint={`${product.category} product`}
                   />
                    {product.discount && (
                     <Badge className="absolute top-4 right-4 text-lg">
