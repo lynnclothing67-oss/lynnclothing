@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { Product } from '@/lib/types';
 import { getProduct, updateProduct } from '@/lib/products-service';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Trash2 } from 'lucide-react';
+import { Loader2, Trash2, ImageIcon, ListTree } from 'lucide-react';
 
 export default function EditProductPage() {
   const router = useRouter();
@@ -93,7 +93,8 @@ export default function EditProductPage() {
     return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
   }
   
-  const handleSubmit = async () => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setLoading(true);
     try {
       if (imageUrls.length === 0) {
@@ -106,7 +107,7 @@ export default function EditProductPage() {
         return;
       }
 
-      const updatedProduct: Partial<Product> = {
+      const updatedProductData: Partial<Product> = {
         name,
         category,
         price: parseFloat(price),
@@ -116,20 +117,29 @@ export default function EditProductPage() {
         details: details,
       };
 
-      await updateProduct(product.id, updatedProduct);
-      toast({
-        title: 'Product Updated',
-        description: 'The product has been successfully updated.',
+      updateProduct(product.id, updatedProductData).then(() => {
+        toast({
+          title: 'Product Updated',
+          description: 'The product has been successfully updated.',
+        });
+        router.push('/admin');
+      }).catch((error) => {
+         console.error("Error updating product:", error);
+         toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'There was an error updating the product.',
+        });
+      }).finally(() => {
+        setLoading(false);
       });
-      router.push('/admin');
     } catch (error) {
-       console.error("Error updating product:", error);
+       console.error("Error preparing product update:", error);
        toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'There was an error updating the product.',
+        description: 'An unexpected error occurred while preparing the update.',
       });
-    } finally {
       setLoading(false);
     }
   };
@@ -183,10 +193,15 @@ export default function EditProductPage() {
                   />
                   <Button type="button" onClick={handleAddImageUrl}>Add Image</Button>
               </div>
-               <div className="space-y-2 mt-2">
-                  {imageUrls.map((url, index) => (
-                    <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md border bg-muted/50">
-                      <span className="text-sm truncate">{url}</span>
+               <div className="space-y-2 mt-2 border rounded-md p-2 min-h-[6rem]">
+                  {imageUrls.length === 0 ? (
+                    <div className="text-sm text-muted-foreground flex items-center justify-center h-full">
+                      <ImageIcon className="mr-2 h-4 w-4" />
+                      No image URLs added.
+                    </div>
+                  ) : imageUrls.map((url, index) => (
+                    <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md bg-muted/50 text-sm">
+                      <span className="truncate flex-1">{url}</span>
                       <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveImageUrl(url)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -212,10 +227,15 @@ export default function EditProductPage() {
                   />
                   <Button type="button" onClick={handleAddDetail}>Add Detail</Button>
               </div>
-               <div className="space-y-2 mt-2">
-                  {details.map((detail, index) => (
-                    <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md border bg-muted/50">
-                      <span className="text-sm truncate">{detail}</span>
+               <div className="space-y-2 mt-2 border rounded-md p-2 min-h-[6rem]">
+                   {details.length === 0 ? (
+                    <div className="text-sm text-muted-foreground flex items-center justify-center h-full">
+                      <ListTree className="mr-2 h-4 w-4" />
+                      No details added.
+                    </div>
+                  ) : details.map((detail, index) => (
+                    <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md bg-muted/50 text-sm">
+                      <span className="truncate flex-1">{detail}</span>
                       <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveDetail(detail)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>

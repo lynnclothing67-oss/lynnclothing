@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { addProduct } from '@/lib/products-service';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Trash2 } from 'lucide-react';
+import { Loader2, Trash2, ImageIcon, ListTree } from 'lucide-react';
 import type { Product } from '@/lib/types';
 
 export default function NewProductPage() {
@@ -68,7 +68,8 @@ export default function NewProductPage() {
     setDetails(details.filter(detail => detail !== detailToRemove));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (imageUrls.length === 0) {
       toast({
         variant: 'destructive',
@@ -100,20 +101,29 @@ export default function NewProductPage() {
         details: details,
       };
 
-      await addProduct(newProduct);
-      toast({
-        title: 'Product Created',
-        description: 'The new product has been successfully added.',
+      addProduct(newProduct).then(() => {
+        toast({
+          title: 'Product Created',
+          description: 'The new product has been successfully added.',
+        });
+        router.push('/admin');
+      }).catch((error) => {
+        console.error("Error creating product:", error);
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'There was an error creating the product.',
+        });
+      }).finally(() => {
+        setLoading(false);
       });
-      router.push('/admin');
     } catch (error) {
-      console.error("Error creating product:", error);
+      console.error("Error preparing product:", error);
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'There was an error creating the product.',
+        description: 'An unexpected error occurred while preparing the product.',
       });
-    } finally {
       setLoading(false);
     }
   };
@@ -167,10 +177,15 @@ export default function NewProductPage() {
                   />
                   <Button type="button" onClick={handleAddImageUrl}>Add Image</Button>
               </div>
-               <div className="space-y-2 mt-2">
-                  {imageUrls.map((url, index) => (
-                    <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md border bg-muted/50">
-                      <span className="text-sm truncate">{url}</span>
+               <div className="space-y-2 mt-2 border rounded-md p-2 min-h-[6rem]">
+                  {imageUrls.length === 0 ? (
+                    <div className="text-sm text-muted-foreground flex items-center justify-center h-full">
+                        <ImageIcon className="mr-2 h-4 w-4" />
+                        No image URLs added.
+                    </div>
+                  ) : imageUrls.map((url, index) => (
+                    <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md bg-muted/50 text-sm">
+                      <span className="truncate flex-1">{url}</span>
                       <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveImageUrl(url)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -196,10 +211,15 @@ export default function NewProductPage() {
                   />
                   <Button type="button" onClick={handleAddDetail}>Add Detail</Button>
               </div>
-               <div className="space-y-2 mt-2">
-                  {details.map((detail, index) => (
-                    <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md border bg-muted/50">
-                      <span className="text-sm truncate">{detail}</span>
+               <div className="space-y-2 mt-2 border rounded-md p-2 min-h-[6rem]">
+                  {details.length === 0 ? (
+                     <div className="text-sm text-muted-foreground flex items-center justify-center h-full">
+                        <ListTree className="mr-2 h-4 w-4" />
+                        No details added.
+                    </div>
+                  ) : details.map((detail, index) => (
+                    <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md bg-muted/50 text-sm">
+                      <span className="truncate flex-1">{detail}</span>
                       <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveDetail(detail)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
