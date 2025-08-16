@@ -9,7 +9,7 @@ import "./globals.css";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
-function BodyContent({ children }: { children: React.ReactNode }) {
+function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const [isClient, setIsClient] = useState(false);
   const pathname = usePathname();
 
@@ -18,21 +18,20 @@ function BodyContent({ children }: { children: React.ReactNode }) {
   }, []);
 
   if (!isClient) {
+    // Render nothing on the server to avoid mismatch
     return null;
   }
-  
+
   const isAdminLogin = pathname === '/admin/login';
 
   return (
-    <>
-      <div className="flex flex-col min-h-screen">
-        {!isAdminLogin && <Header />}
-        <main className="flex-grow">{children}</main>
-        {!isAdminLogin && <Footer />}
-      </div>
+    <div className="flex flex-col min-h-screen">
+      {!isAdminLogin && <Header />}
+      <main className="flex-grow">{children}</main>
+      {!isAdminLogin && <Footer />}
       {!isAdminLogin && <WhatsAppButton />}
       <Toaster />
-    </>
+    </div>
   );
 }
 
@@ -49,7 +48,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-          <BodyContent>{children}</BodyContent>
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );
