@@ -6,13 +6,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  "projectId": "petalcart",
-  "appId": "1:1045812420155:web:ab9e7c11f10c985f10061e",
-  "storageBucket": "petalcart.firebasestorage.app",
-  "apiKey": "AIzaSyAE9mxC5jhGPKDhYB0fQn94EdGuaL-lJgg",
-  "authDomain": "petalcart.firebaseapp.com",
-  "measurementId": "",
-  "messagingSenderId": "1045812420155"
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PULIC_FIREBASE_AUTH_DOMAIN,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
 };
 
 
@@ -23,3 +22,4 @@ const storage = getStorage(app);
 const auth = getAuth(app);
 
 export { app, db, storage, auth };
+
