@@ -18,7 +18,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   }, []);
 
   if (!isClient) {
-    return null;
+    return null; // Return null on the server and initial client render
   }
 
   return (
