@@ -103,5 +103,38 @@ export const products: Product[] = [
     ],
     description: "Look sharp and sophisticated in these tailored trousers. The straight-leg cut and pressed creases create a polished and professional look.",
     details: ["Polyester/Rayon blend", "Zip fly with hook closure", "Side pockets", "Straight-leg fit"]
+  },
+  {
+    id: "9",
+    name: "Girl's Twirl Dress",
+    category: "girls",
+    price: 45.0,
+    images: [
+        "https://placehold.co/600x800.png"
+    ],
+    description: "A playful and comfortable dress perfect for any little girl. Made from soft cotton with a full skirt for maximum twirl.",
+    details: ["100% Cotton", "Round neck", "Short sleeves", "Machine washable"]
+  },
+  {
+    id: "10",
+    name: "Girl's Graphic Tee",
+    category: "girls",
+    price: 25.0,
+    images: [
+        "https://placehold.co/600x800.png"
+    ],
+    description: "A fun graphic t-shirt with a cute unicorn print. Made from soft, breathable cotton.",
+    details: ["100% Cotton", "Crew neck", "Unicorn graphic", "Machine washable"]
+  },
+  {
+    id: "11",
+    name: "Girl's Denim Skirt",
+    category: "girls",
+    price: 35.0,
+    images: [
+        "https://placehold.co/600x800.png"
+    ],
+    description: "A classic denim skirt with an adjustable waistband for a perfect fit. Features front and back pockets.",
+    details: ["Cotton/Elastane blend", "Adjustable waistband", "Five-pocket styling", "Button and zip closure"]
   }
 ];
