@@ -70,8 +70,9 @@ export default function NewProductPage() {
     setDetails(details.filter(detail => detail !== detailToRemove));
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
     if (imageUrls.length === 0) {
       toast({
         variant: 'destructive',
@@ -103,29 +104,22 @@ export default function NewProductPage() {
         details: details,
       };
 
-      addProduct(newProduct).then(() => {
-        toast({
-          title: 'Product Created',
-          description: 'The new product has been successfully added.',
-        });
-        router.push('/admin');
-      }).catch((error) => {
-        console.error("Error creating product:", error);
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: 'There was an error creating the product.',
-        });
-      }).finally(() => {
-        setLoading(false);
+      await addProduct(newProduct);
+      
+      toast({
+        title: 'Product Created',
+        description: 'The new product has been successfully added.',
       });
+      router.push('/admin');
+
     } catch (error) {
-      console.error("Error preparing product:", error);
+      console.error("Error creating product:", error);
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: 'An unexpected error occurred while preparing the product.',
+        description: 'There was an error creating the product.',
       });
+    } finally {
       setLoading(false);
     }
   };

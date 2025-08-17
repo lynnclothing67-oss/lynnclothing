@@ -96,20 +96,21 @@ export default function EditProductPage() {
     return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
   }
   
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      if (imageUrls.length === 0) {
-        toast({
-            variant: 'destructive',
-            title: 'Image Required',
-            description: 'Please upload at least one image.',
-        });
-        setLoading(false);
-        return;
-      }
 
+    if (imageUrls.length === 0) {
+      toast({
+          variant: 'destructive',
+          title: 'Image Required',
+          description: 'Please upload at least one image.',
+      });
+      setLoading(false);
+      return;
+    }
+
+    try {
       const updatedProductData: Partial<Product> = {
         name,
         category,
@@ -120,22 +121,14 @@ export default function EditProductPage() {
         details: details,
       };
 
-      updateProduct(product.id, updatedProductData).then(() => {
-        toast({
-          title: 'Product Updated',
-          description: 'The product has been successfully updated.',
-        });
-        router.push('/admin');
-      }).catch((error) => {
-         console.error("Error updating product:", error);
-         toast({
-            variant: 'destructive',
-            title: 'Error',
-            description: 'There was an error updating the product.',
-        });
-      }).finally(() => {
-        setLoading(false);
+      await updateProduct(product.id, updatedProductData);
+      
+      toast({
+        title: 'Product Updated',
+        description: 'The product has been successfully updated.',
       });
+      router.push('/admin');
+
     } catch (error) {
        console.error("Error preparing product update:", error);
        toast({
@@ -143,6 +136,7 @@ export default function EditProductPage() {
         title: 'Error',
         description: 'An unexpected error occurred while preparing the update.',
       });
+    } finally {
       setLoading(false);
     }
   };
