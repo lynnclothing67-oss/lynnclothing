@@ -9,15 +9,17 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
 import { useState } from 'react';
-import { addProduct } from '@/lib/products-service';
+import { addProduct, uploadImage } from '@/lib/products-service';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Trash2, ImageIcon, ListTree } from 'lucide-react';
+import { Loader2, Trash2, ListTree, Upload } from 'lucide-react';
 import type { Product } from '@/lib/types';
+import Image from 'next/image';
 
 export default function NewProductPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   
   // State for controlled inputs
   const [name, setName] = useState('');
@@ -26,30 +28,30 @@ export default function NewProductPage() {
   const [discount, setDiscount] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [currentImageUrl, setCurrentImageUrl] = useState('');
   const [details, setDetails] = useState<string[]>([]);
   const [currentDetail, setCurrentDetail] = useState('');
 
-  const handleAddImageUrl = () => {
-    if (currentImageUrl.trim() && !imageUrls.includes(currentImageUrl.trim())) {
-      setImageUrls([...imageUrls, currentImageUrl.trim()]);
-      setCurrentImageUrl('');
-       toast({
-        title: 'Image URL Added',
-        description: 'The image URL has been successfully added.',
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const uploadPromises = Array.from(files).map(file => uploadImage(file));
+      const urls = await Promise.all(uploadPromises);
+      setImageUrls(prev => [...prev, ...urls]);
+      toast({
+        title: `${files.length} image(s) uploaded successfully!`,
       });
-    } else if (!currentImageUrl.trim()) {
-        toast({
-            variant: 'destructive',
-            title: 'Empty URL',
-            description: 'Please enter an image URL.',
-        });
-    } else {
-         toast({
-            variant: 'destructive',
-            title: 'Duplicate URL',
-            description: 'This image URL has already been added.',
-        });
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      toast({
+        variant: "destructive",
+        title: "Image upload failed",
+        description: "There was an error uploading your images.",
+      });
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -73,8 +75,8 @@ export default function NewProductPage() {
     if (imageUrls.length === 0) {
       toast({
         variant: 'destructive',
-        title: 'Image URL Required',
-        description: 'Please add at least one image URL.',
+        title: 'Image Required',
+        description: 'Please upload at least one image.',
       });
       return;
     }
@@ -160,38 +162,34 @@ export default function NewProductPage() {
               <Textarea id="description" placeholder="A light and airy floral sundress..." value={description} onChange={e => setDescription(e.target.value)} />
             </div>
              <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="imageUrl">Product Image URLs</Label>
-               <div className="flex items-center gap-2">
-                  <Input 
-                    id="imageUrl" 
-                    type="text" 
-                    placeholder="https://example.com/image.png" 
-                    value={currentImageUrl}
-                    onChange={(e) => setCurrentImageUrl(e.target.value)}
-                     onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          handleAddImageUrl();
-                        }
-                      }}
-                  />
-                  <Button type="button" onClick={handleAddImageUrl}>Add Image</Button>
-              </div>
-               <div className="space-y-2 mt-2 border rounded-md p-2 min-h-[6rem]">
-                  {imageUrls.length === 0 ? (
-                    <div className="text-sm text-muted-foreground flex items-center justify-center h-full">
-                        <ImageIcon className="mr-2 h-4 w-4" />
-                        No image URLs added.
+                <Label>Product Images</Label>
+                <div className="p-2 border rounded-md min-h-[6rem] space-y-2">
+                    <div className="grid grid-cols-3 gap-2">
+                        {imageUrls.map((url, index) => (
+                        <div key={index} className="relative group aspect-square">
+                            <Image src={url} alt={`Product image ${index + 1}`} layout="fill" objectFit="cover" className="rounded-md" />
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <Button type="button" size="icon" variant="destructive" onClick={() => handleRemoveImageUrl(url)}>
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                            </div>
+                        </div>
+                        ))}
                     </div>
-                  ) : imageUrls.map((url, index) => (
-                    <div key={index} className="flex items-center justify-between gap-2 p-2 rounded-md bg-muted/50 text-sm">
-                       <p className="flex-1 truncate">{url}</p>
-                      <Button type="button" size="icon" variant="ghost" onClick={() => handleRemoveImageUrl(url)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-               </div>
+
+                    {uploading ? (
+                      <div className="flex items-center justify-center p-4">
+                        <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                        <span>Uploading...</span>
+                      </div>
+                    ) : (
+                      <Label htmlFor="image-upload" className="w-full flex items-center justify-center p-4 border-2 border-dashed rounded-md cursor-pointer hover:bg-muted/50 transition-colors">
+                        <Upload className="h-5 w-5 mr-2" />
+                        <span>Add Images</span>
+                        <Input id="image-upload" type="file" multiple accept="image/*" className="sr-only" onChange={handleImageUpload} disabled={uploading} />
+                      </Label>
+                    )}
+                </div>
             </div>
              <div className="flex flex-col space-y-1.5">
               <Label htmlFor="details">Product Details</Label>
@@ -233,7 +231,7 @@ export default function NewProductPage() {
            <Button variant="ghost" asChild>
                 <Link href="/admin">Cancel</Link>
            </Button>
-          <Button onClick={handleSubmit} disabled={loading} type="button">
+          <Button onClick={handleSubmit} disabled={loading || uploading} type="button">
             {loading ? <Loader2 className="animate-spin" /> : 'Create Product'}
           </Button>
         </CardFooter>
