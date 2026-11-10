@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
               LYNN
             </span>
             <span className="text-[10px] font-body text-primary tracking-[0.4em] uppercase">
-              Clothing
+              Boutique
             </span>
           </div>
           <CardTitle className="font-headline text-2xl">Admin Login</CardTitle>
@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
               <Input 
                 id="email" 
                 type="email" 
-                placeholder="admin@lynn.clothing" 
+                placeholder="admin@lynn.boutique" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required 

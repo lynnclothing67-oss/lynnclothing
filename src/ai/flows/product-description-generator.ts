@@ -37,7 +37,7 @@ const prompt = ai.definePrompt({
   name: 'generateProductDescriptionPrompt',
   input: {schema: GenerateProductDescriptionInputSchema},
   output: {schema: GenerateProductDescriptionOutputSchema},
-  prompt: `You are an e-commerce product description writer specializing in women's clothing.
+  prompt: `You are an e-commerce product description writer specializing in a high-end women's boutique.
 
   Generate an engaging and informative product description based on the following information:
 
@@ -45,7 +45,7 @@ const prompt = ai.definePrompt({
   Category: {{category}}
   Keywords: {{keywords}}
 
-  The description should be approximately 150-200 words and highlight the key features and benefits of the product. Focus on a soft pastel palette with accents of rose gold.
+  The description should be approximately 150-200 words and highlight the key features and benefits of the product. Focus on a sophisticated and elegant tone appropriate for LYNN BOUTIQUE.
   `,
 });
 

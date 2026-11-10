@@ -10,7 +10,7 @@ export default function Footer() {
               LYNN
             </span>
             <span className="text-[8px] font-body text-primary tracking-[0.4em] -mt-0.5 uppercase">
-              Clothing
+              Boutique
             </span>
           </div>
           <div className="flex gap-8 text-sm uppercase tracking-widest font-medium">
@@ -29,7 +29,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="text-center text-muted-foreground text-[10px] mt-12 pt-8 border-t tracking-widest uppercase">
-          <p>&copy; {new Date().getFullYear()} LYNN CLOTHING. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} LYNN BOUTIQUE. All rights reserved.</p>
         </div>
       </div>
     </footer>

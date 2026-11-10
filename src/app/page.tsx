@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from "next/image";
@@ -80,7 +79,7 @@ export default function Home() {
             Curated <br />Sophistication.
           </h1>
           <p className="mt-6 text-lg md:text-xl max-w-2xl mx-auto text-foreground/80 font-body uppercase tracking-[0.3em]">
-            LYNN CLOTHING &bull; EST 2024
+            LYNN BOUTIQUE &bull; EST 2024
           </p>
           <Button asChild size="lg" className="mt-12 tracking-widest uppercase bg-primary text-primary-foreground hover:bg-primary/90 px-12 py-8 text-sm">
             <Link href="#collections">Explore the Collection</Link>

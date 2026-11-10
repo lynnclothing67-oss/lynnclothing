@@ -10,7 +10,7 @@ export default function Header() {
             LYNN
           </span>
           <span className="text-[10px] font-body text-primary tracking-[0.4em] -mt-1 uppercase">
-            Clothing
+            Boutique
           </span>
         </Link>
         <nav className="flex items-center gap-4">
