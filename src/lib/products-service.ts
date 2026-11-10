@@ -1,4 +1,3 @@
-
 import { collection, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import type { Product } from './types';

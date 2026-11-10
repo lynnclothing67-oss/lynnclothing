@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { Product } from '@/lib/types';
 import { getProduct, updateProduct, uploadImage } from '@/lib/products-service';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Trash2, ImageIcon, ListTree, Upload } from 'lucide-react';
+import { Loader2, Trash2, ListTree, Upload } from 'lucide-react';
 import Image from 'next/image';
 
 export default function EditProductPage() {
@@ -68,13 +68,12 @@ export default function EditProductPage() {
       toast({
         variant: "destructive",
         title: "Image upload failed",
-        description: "There was an error uploading your images.",
+        description: "There was an error uploading your images to Cloudinary.",
       });
     } finally {
       setUploading(false);
     }
   };
-
 
   const handleRemoveImageUrl = (urlToRemove: string) => {
     setImageUrls(imageUrls.filter(url => url !== urlToRemove));
@@ -145,26 +144,26 @@ export default function EditProductPage() {
        <Card className="max-w-2xl mx-auto rounded-none border-primary/10">
         <CardHeader>
           <CardTitle className="font-headline text-2xl">Edit Piece</CardTitle>
-          <CardDescription className="text-[10px] uppercase tracking-widest">Update the details for {product.name}.</CardDescription>
+          <CardDescription className="text-[10px] uppercase tracking-widest">Update the details for {product.name} at LYNN Clothing.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid w-full items-center gap-6">
             <div className="flex flex-col space-y-2">
               <Label htmlFor="name" className="text-[10px] uppercase tracking-widest font-bold">Product Name</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required className="rounded-none border-primary/20" />
+              <input id="name" value={name} onChange={(e) => setName(e.target.value)} required className="flex h-10 w-full border border-primary/20 bg-background px-3 py-2 text-sm focus-visible:outline-none rounded-none" />
             </div>
             <div className="flex flex-col space-y-2">
               <Label htmlFor="category" className="text-[10px] uppercase tracking-widest font-bold">Category</Label>
-              <Input id="category" value={category} onChange={(e) => setCategory(e.target.value)} required className="rounded-none border-primary/20" />
+              <input id="category" value={category} onChange={(e) => setCategory(e.target.value)} required className="flex h-10 w-full border border-primary/20 bg-background px-3 py-2 text-sm focus-visible:outline-none rounded-none" />
             </div>
              <div className="grid grid-cols-2 gap-4">
                <div className="flex flex-col space-y-2">
                 <Label htmlFor="price" className="text-[10px] uppercase tracking-widest font-bold">Price (Rs.)</Label>
-                <Input id="price" type="number" step="1" value={price} onChange={(e) => setPrice(e.target.value)} required className="rounded-none border-primary/20" />
+                <input id="price" type="number" step="1" value={price} onChange={(e) => setPrice(e.target.value)} required className="flex h-10 w-full border border-primary/20 bg-background px-3 py-2 text-sm focus-visible:outline-none rounded-none" />
               </div>
                <div className="flex flex-col space-y-2">
                 <Label htmlFor="discount" className="text-[10px] uppercase tracking-widest font-bold">Discount (%)</Label>
-                <Input id="discount" type="number" step="0.01" value={discount} onChange={(e) => setDiscount(e.target.value)} placeholder="e.g. 10" className="rounded-none border-primary/20" />
+                <input id="discount" type="number" step="0.01" value={discount} onChange={(e) => setDiscount(e.target.value)} placeholder="e.g. 10" className="flex h-10 w-full border border-primary/20 bg-background px-3 py-2 text-sm focus-visible:outline-none rounded-none" />
               </div>
             </div>
             <div className="flex flex-col space-y-2">
@@ -190,7 +189,7 @@ export default function EditProductPage() {
                     {uploading ? (
                       <div className="flex flex-col items-center justify-center p-8 bg-secondary/10">
                         <Loader2 className="h-8 w-8 animate-spin mb-2 text-primary" />
-                        <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Uploading...</span>
+                        <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Uploading to Cloudinary...</span>
                       </div>
                     ) : (
                       <Label htmlFor="image-upload" className="w-full flex flex-col items-center justify-center p-8 border-2 border-dashed border-primary/10 rounded-none cursor-pointer hover:bg-secondary/20 transition-colors">
@@ -204,13 +203,13 @@ export default function EditProductPage() {
             <div className="flex flex-col space-y-2">
               <Label htmlFor="details" className="text-[10px] uppercase tracking-widest font-bold">Product Details</Label>
                <div className="flex items-center gap-2">
-                  <Input 
+                  <input 
                     id="details" 
                     type="text" 
                     placeholder="e.g. Pure Cotton" 
                     value={currentDetail}
                     onChange={(e) => setCurrentDetail(e.target.value)}
-                    className="rounded-none border-primary/20"
+                    className="flex h-10 w-full border border-primary/20 bg-background px-3 py-2 text-sm focus-visible:outline-none rounded-none"
                      onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();

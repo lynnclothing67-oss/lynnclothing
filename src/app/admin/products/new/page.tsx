@@ -135,20 +135,20 @@ export default function NewProductPage() {
           <div className="grid w-full items-center gap-6">
             <div className="flex flex-col space-y-2">
               <Label htmlFor="name" className="text-[10px] uppercase tracking-widest font-bold">Product Name</Label>
-              <Input id="name" placeholder="e.g. Silk Embroidered Suit" className="rounded-none border-primary/20" value={name} onChange={e => setName(e.target.value)} required />
+              <input id="name" placeholder="e.g. Silk Embroidered Suit" className="flex h-10 w-full border border-primary/20 bg-background px-3 py-2 text-sm focus-visible:outline-none rounded-none" value={name} onChange={e => setName(e.target.value)} required />
             </div>
             <div className="flex flex-col space-y-2">
               <Label htmlFor="category" className="text-[10px] uppercase tracking-widest font-bold">Category</Label>
-              <Input id="category" placeholder="e.g. salwar readymade" className="rounded-none border-primary/20" value={category} onChange={e => setCategory(e.target.value)} required />
+              <input id="category" placeholder="e.g. salwar readymade" className="flex h-10 w-full border border-primary/20 bg-background px-3 py-2 text-sm focus-visible:outline-none rounded-none" value={category} onChange={e => setCategory(e.target.value)} required />
             </div>
              <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col space-y-2">
                 <Label htmlFor="price" className="text-[10px] uppercase tracking-widest font-bold">Price (Rs.)</Label>
-                <Input id="price" type="number" step="1" className="rounded-none border-primary/20" placeholder="0" value={price} onChange={e => setPrice(e.target.value)} required />
+                <input id="price" type="number" step="1" className="flex h-10 w-full border border-primary/20 bg-background px-3 py-2 text-sm focus-visible:outline-none rounded-none" placeholder="0" value={price} onChange={e => setPrice(e.target.value)} required />
               </div>
               <div className="flex flex-col space-y-2">
                 <Label htmlFor="discount" className="text-[10px] uppercase tracking-widest font-bold">Discount (%)</Label>
-                <Input id="discount" type="number" step="0.01" className="rounded-none border-primary/20" placeholder="e.g. 10" value={discount} onChange={e => setDiscount(e.target.value)} />
+                <input id="discount" type="number" step="0.01" className="flex h-10 w-full border border-primary/20 bg-background px-3 py-2 text-sm focus-visible:outline-none rounded-none" placeholder="e.g. 10" value={discount} onChange={e => setDiscount(e.target.value)} />
               </div>
             </div>
             <div className="flex flex-col space-y-2">
@@ -188,11 +188,11 @@ export default function NewProductPage() {
              <div className="flex flex-col space-y-2">
               <Label htmlFor="details" className="text-[10px] uppercase tracking-widest font-bold">Product Details</Label>
                <div className="flex items-center gap-2">
-                  <Input 
+                  <input 
                     id="details" 
                     type="text" 
                     placeholder="e.g. Pure Cotton" 
-                    className="rounded-none border-primary/20"
+                    className="flex h-10 w-full border border-primary/20 bg-background px-3 py-2 text-sm focus-visible:outline-none rounded-none"
                     value={currentDetail}
                     onChange={(e) => setCurrentDetail(e.target.value)}
                      onKeyDown={(e) => {
