@@ -16,35 +16,35 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link href={`/products/${product.id}`}>
-      <Card className="overflow-hidden h-full group transition-all duration-500 ease-in-out hover:shadow-2xl border-transparent bg-transparent rounded-none">
+      <Card className="overflow-hidden h-full group transition-all duration-500 ease-in-out hover:shadow-xl border-transparent bg-transparent rounded-none">
         <CardContent className="p-0">
-          <div className="aspect-[3/4] overflow-hidden relative">
+          <div className="aspect-[3/4] overflow-hidden relative bg-secondary/5">
             <Image
               src={product.images[0]}
               alt={product.name}
               fill
-              className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+              className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
               data-ai-hint={`${product.category} clothing`}
             />
             {product.discount && (
-              <div className="absolute top-4 left-4 bg-primary text-primary-foreground text-[10px] tracking-widest uppercase py-1 px-2 font-bold shadow-lg">
+              <div className="absolute top-4 left-4 bg-primary text-primary-foreground text-[9px] tracking-[0.2em] uppercase py-1 px-3 font-medium">
                 {product.discount}% OFF
               </div>
             )}
           </div>
-          <div className="p-6 bg-background/50 backdrop-blur-sm border-t border-primary/5 text-center">
-            <p className="text-[10px] tracking-[0.3em] text-muted-foreground uppercase mb-2">
+          <div className="py-6 text-center">
+            <p className="text-[9px] tracking-[0.4em] text-muted-foreground uppercase mb-3">
               {product.category}
             </p>
-            <h3 className="font-headline text-lg font-bold truncate mb-2 group-hover:text-primary transition-colors">
+            <h3 className="font-headline text-base font-bold truncate mb-3 group-hover:text-primary transition-colors">
               {product.name}
             </h3>
-            <div className="flex items-center justify-center gap-3">
-              <p className="text-primary font-bold">
+            <div className="flex items-center justify-center gap-4">
+              <p className="text-primary font-bold text-sm tracking-widest">
                 {"\u20B9"}{discountedPrice.toFixed(2)}
               </p>
               {product.discount && (
-                <p className="text-muted-foreground line-through text-xs opacity-60">
+                <p className="text-muted-foreground line-through text-[10px] opacity-40">
                   {"\u20B9"}{product.price.toFixed(2)}
                 </p>
               )}

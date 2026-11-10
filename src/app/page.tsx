@@ -64,7 +64,7 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <section className="relative text-center py-32 mb-16 overflow-hidden bg-secondary/20">
+      <section className="relative text-center py-32 mb-16 overflow-hidden bg-secondary/10">
         <div className="absolute inset-0">
           <Image
             src={placeholders.hero.src}
@@ -94,7 +94,7 @@ export default function Home() {
                 <Input 
                     type="search"
                     placeholder="FIND YOUR STYLE..."
-                    className="pl-12 w-full h-14 tracking-widest text-[10px] uppercase border-primary/20 bg-transparent"
+                    className="pl-12 w-full h-14 tracking-widest text-[10px] uppercase border-primary/20 bg-transparent rounded-none"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -116,12 +116,12 @@ export default function Home() {
           </div>
         ) : (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="flex flex-wrap justify-center w-full bg-transparent p-0 gap-8 mb-16 h-auto">
+            <TabsList className="flex flex-wrap justify-center w-full bg-transparent p-0 gap-x-10 gap-y-4 mb-16 h-auto">
                 {categories.map((category) => (
                 <TabsTrigger
                     key={category}
                     value={category}
-                    className="capitalize text-xs tracking-[0.3em] font-medium py-4 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary rounded-none transition-all uppercase"
+                    className="capitalize text-[10px] tracking-[0.4em] font-medium py-3 bg-transparent border-b border-transparent data-[state=active]:border-primary data-[state=active]:text-primary rounded-none transition-all uppercase px-0 shadow-none hover:text-primary/70"
                 >
                     {category}
                 </TabsTrigger>
