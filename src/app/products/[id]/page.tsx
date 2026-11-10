@@ -33,15 +33,14 @@ export default function ProductPage() {
 
 
   if (!product) {
-    // TODO: A notFound() call here causes a build-time error.
-    return <div>Loading...</div>;
+    return <div className="flex h-[60vh] items-center justify-center font-headline italic">LYNN is loading...</div>;
   }
 
   const discountedPrice = product.discount 
     ? product.price - (product.price * (product.discount / 100))
     : product.price;
 
-  const whatsappMessage = `Hi, I'm interested in this product: ${product.name}`;
+  const whatsappMessage = `Hi, I'm interested in this piece: ${product.name} from LYNN Boutique`;
   const whatsappUrl = `https://wa.me/7907963091?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
@@ -55,13 +54,12 @@ export default function ProductPage() {
                   <Image
                     src={img}
                     alt={`${product.name} - view ${index + 1}`}
-                    layout="fill"
-                    objectFit="cover"
-                    className="w-full h-full"
+                    fill
+                    className="object-cover"
                     data-ai-hint={`${product.category} product`}
                   />
                    {product.discount && (
-                    <Badge className="absolute top-4 right-4 text-lg">
+                    <Badge className="absolute top-4 right-4 text-xs tracking-widest uppercase bg-primary px-3 py-1">
                       {product.discount}% OFF
                     </Badge>
                   )}
@@ -74,8 +72,13 @@ export default function ProductPage() {
         </Carousel>
 
         <div className="flex flex-col gap-6">
-          <Badge variant="secondary" className="w-fit capitalize">{product.category}</Badge>
-          <h1 className="font-headline text-4xl md:text-5xl font-bold">{product.name}</h1>
+          <div className="flex flex-col gap-2">
+            <Badge variant="secondary" className="w-fit capitalize text-[10px] tracking-[0.2em] font-medium py-1 px-3">
+              {product.category}
+            </Badge>
+            <h1 className="font-headline text-4xl md:text-5xl font-bold text-foreground">{product.name}</h1>
+          </div>
+          
           <div className="flex items-baseline gap-4">
             <p className="text-3xl font-semibold text-primary">₹{discountedPrice.toFixed(2)}</p>
              {product.discount && (
@@ -84,29 +87,29 @@ export default function ProductPage() {
                 </p>
               )}
           </div>
-          <p className="text-muted-foreground leading-relaxed">{product.description}</p>
           
-          <div>
-            <h3 className="font-headline text-lg font-semibold mb-2">Details</h3>
-            <ul className="space-y-2">
+          <p className="text-foreground/80 leading-relaxed font-body">{product.description}</p>
+          
+          <div className="pt-4 border-t border-primary/10">
+            <h3 className="font-headline text-lg font-semibold mb-4 italic text-primary">Product Details</h3>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {product.details.map((detail, i) => (
-                <li key={i} className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary" />
+                <li key={i} className="flex items-center gap-3 text-sm text-foreground/70">
+                  <Check className="h-4 w-4 text-primary shrink-0" />
                   <span>{detail}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="w-full text-lg py-7" asChild>
+          <div className="flex flex-col sm:flex-row gap-4 mt-6">
+            <Button size="lg" className="w-full text-xs tracking-[0.3em] uppercase py-8 bg-primary hover:bg-primary/90" asChild>
               <Link href={whatsappUrl} target="_blank">
-                <MessageSquare className="mr-2" />
-                Buy Now
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Inquire on WhatsApp
               </Link>
             </Button>
           </div>
-          
         </div>
       </div>
       <ProductRecommendations currentProduct={product} allProducts={allProducts} />
