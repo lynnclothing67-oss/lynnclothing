@@ -1,12 +1,11 @@
-
 import type { Metadata } from "next";
 import "./globals.css";
 import LayoutWrapper from "./LayoutWrapper";
 
 
 export const metadata: Metadata = {
-  title: "PastelCart",
-  description: "Effortless Elegance, Redefined",
+  title: "LYNN CLOTHING",
+  description: "Sophisticated Elegance for the Modern Individual",
 };
 
 export default function RootLayout({

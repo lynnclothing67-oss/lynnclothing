@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -7,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ShoppingBag, Loader2, Eye, EyeOff } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { signIn, sendPasswordReset } from '@/lib/auth-service';
@@ -67,17 +66,19 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-secondary/50">
+    <div className="flex items-center justify-center min-h-screen bg-secondary/30">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <div className="flex justify-center items-center gap-2 mb-4">
-            <ShoppingBag className="w-8 h-8 text-primary" />
-            <span className="text-2xl font-bold font-headline text-primary">
-              PastelCart
+          <div className="flex flex-col items-center gap-1 mb-6">
+            <span className="text-4xl font-bold font-headline text-primary tracking-[0.2em]">
+              LYNN
+            </span>
+            <span className="text-[10px] font-body text-primary tracking-[0.4em] uppercase">
+              Clothing
             </span>
           </div>
-          <CardTitle className="font-headline text-2xl">Admin Portal</CardTitle>
-          <CardDescription>Enter your credentials to access the dashboard.</CardDescription>
+          <CardTitle className="font-headline text-2xl">Admin Login</CardTitle>
+          <CardDescription>Secure access to the LYNN management portal.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid w-full items-center gap-4">
@@ -86,7 +87,7 @@ export default function AdminLoginPage() {
               <Input 
                 id="email" 
                 type="email" 
-                placeholder="admin@example.com" 
+                placeholder="admin@lynn.clothing" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required 
@@ -117,14 +118,14 @@ export default function AdminLoginPage() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button onClick={handleLogin} className="w-full" disabled={loading}>
-            {loading ? <Loader2 className="animate-spin" /> : 'Login'}
+          <Button onClick={handleLogin} className="w-full tracking-widest uppercase text-xs" disabled={loading}>
+            {loading ? <Loader2 className="animate-spin" /> : 'Sign In'}
           </Button>
 
           <div className="flex justify-between w-full">
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="link" className="p-0 h-auto">Forgot Password?</Button>
+                <Button variant="link" className="p-0 h-auto text-[10px] uppercase tracking-tighter">Forgot Password?</Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -145,8 +146,8 @@ export default function AdminLoginPage() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <Button variant="link" asChild className="p-0 h-auto">
-                <Link href="/">Back to Shop</Link>
+            <Button variant="link" asChild className="p-0 h-auto text-[10px] uppercase tracking-tighter">
+                <Link href="/">Back to Site</Link>
             </Button>
           </div>
         </CardFooter>

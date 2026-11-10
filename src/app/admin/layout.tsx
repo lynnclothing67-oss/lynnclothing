@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useAuth } from '@/hooks/use-auth';
@@ -6,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ShoppingBag, Loader2, LogOut, User as UserIcon } from 'lucide-react';
+import { Loader2, LogOut, User as UserIcon } from 'lucide-react';
 import { signOut } from '@/lib/auth-service';
 
 export default function AdminLayout({
@@ -50,13 +49,15 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-secondary/50">
+    <div className="flex min-h-screen w-full flex-col bg-secondary/10">
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          <Link href="/admin" className="flex items-center gap-2">
-              <ShoppingBag className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-bold font-headline text-primary">
-                PastelCart Admin
+          <Link href="/admin" className="flex flex-col items-start">
+              <span className="text-xl font-bold font-headline text-primary tracking-[0.2em]">
+                LYNN
+              </span>
+              <span className="text-[8px] font-body text-primary tracking-[0.4em] -mt-1 uppercase">
+                Admin Portal
               </span>
           </Link>
           <div className="flex items-center gap-2">
