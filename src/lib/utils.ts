@@ -6,15 +6,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Formats a number as Indian Rupee (INR) currency.
- * Using a more robust formatting string to ensure the Rupee symbol (₹) 
- * is rendered correctly across different environments.
+ * Formats a number as Indian Rupee (INR) currency using "Rs." prefix.
  */
 export function formatCurrency(amount: number) {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
+  const formatted = new Intl.NumberFormat('en-IN', {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 0,
   }).format(amount);
+  return `Rs. ${formatted}`;
 }

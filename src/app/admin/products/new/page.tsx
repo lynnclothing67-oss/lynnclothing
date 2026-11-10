@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -144,8 +143,8 @@ export default function NewProductPage() {
             </div>
              <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col space-y-2">
-                <Label htmlFor="price" className="text-[10px] uppercase tracking-widest font-bold">Price (₹)</Label>
-                <Input id="price" type="number" step="0.01" className="rounded-none border-primary/20" placeholder="0.00" value={price} onChange={e => setPrice(e.target.value)} required />
+                <Label htmlFor="price" className="text-[10px] uppercase tracking-widest font-bold">Price (Rs.)</Label>
+                <Input id="price" type="number" step="1" className="rounded-none border-primary/20" placeholder="0" value={price} onChange={e => setPrice(e.target.value)} required />
               </div>
               <div className="flex flex-col space-y-2">
                 <Label htmlFor="discount" className="text-[10px] uppercase tracking-widest font-bold">Discount (%)</Label>
