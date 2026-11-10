@@ -60,7 +60,7 @@ export default function Home() {
 
 
   if (loading) {
-    return <div className="flex h-[60vh] items-center justify-center font-headline italic">LYNN is loading...</div>
+    return <div className="flex h-[60vh] items-center justify-center font-headline italic text-primary/60">LYNN is loading...</div>
   }
 
   return (
@@ -96,7 +96,7 @@ export default function Home() {
                     ref={searchInputRef}
                     type="search"
                     placeholder="FIND YOUR STYLE..."
-                    className="pl-12 w-full h-14 tracking-widest text-[10px] uppercase border-primary/20 bg-transparent rounded-none"
+                    className="pl-12 w-full h-14 tracking-widest text-[10px] uppercase border-primary/20 bg-transparent rounded-none focus-visible:ring-primary/20"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Product } from "@/lib/types";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/utils";
 
 interface ProductCardProps {
   product: Product;
@@ -36,16 +37,16 @@ export default function ProductCard({ product }: ProductCardProps) {
             <p className="text-[9px] tracking-[0.4em] text-muted-foreground uppercase mb-3">
               {product.category}
             </p>
-            <h3 className="font-headline text-base font-bold truncate mb-3 group-hover:text-primary transition-colors">
+            <h3 className="font-headline text-base font-bold truncate mb-3 group-hover:text-primary transition-colors px-4">
               {product.name}
             </h3>
             <div className="flex items-center justify-center gap-4">
               <p className="text-primary font-bold text-sm tracking-widest">
-                {"\u20B9"}{discountedPrice.toFixed(2)}
+                {formatCurrency(discountedPrice)}
               </p>
               {product.discount && (
                 <p className="text-muted-foreground line-through text-[10px] opacity-40">
-                  {"\u20B9"}{product.price.toFixed(2)}
+                  {formatCurrency(product.price)}
                 </p>
               )}
             </div>
