@@ -41,7 +41,7 @@ export default function ProductPage() {
     : product.price;
 
   const whatsappMessage = `Hi, I'm interested in this piece: ${product.name} from LYNN Clothing`;
-  const whatsappUrl = `https://wa.me/7907963091?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = `https://wa.me/7306815248?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
     <div className="container mx-auto px-4 py-12">

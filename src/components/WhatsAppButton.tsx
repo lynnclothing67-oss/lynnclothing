@@ -8,7 +8,7 @@ export default function WhatsAppButton() {
       asChild
       className="fixed bottom-6 right-6 h-10 w-10 rounded-full bg-green-500 hover:bg-green-600 shadow-lg transition-transform transform hover:scale-110 p-0 z-50"
     >
-      <Link href="https://wa.me/7907963091" target="_blank" aria-label="Contact support on WhatsApp">
+      <Link href="https://wa.me/7306815248" target="_blank" aria-label="Contact support on WhatsApp">
         <WhatsappIcon className="h-5 w-5 text-white" />
       </Link>
     </Button>
