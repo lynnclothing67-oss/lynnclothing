@@ -37,7 +37,7 @@ export async function deleteProduct(id: string): Promise<void> {
 }
 
 /**
- * Uploads an image file by converting it to base64 and sending it to the Cloudinary Server Action.
+ * Uploads an image file to Cloudinary via a Server Action.
  */
 export async function uploadImage(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
