@@ -1,8 +1,8 @@
 
 import { collection, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from './firebase';
+import { db } from './firebase';
 import type { Product } from './types';
+import { uploadToCloudinary } from '@/app/actions/upload-actions';
 
 const PRODUCTS_COLLECTION = 'products';
 
@@ -36,10 +36,22 @@ export async function deleteProduct(id: string): Promise<void> {
   await deleteDoc(docRef);
 }
 
+/**
+ * Uploads an image file by converting it to base64 and sending it to the Cloudinary Server Action.
+ */
 export async function uploadImage(file: File): Promise<string> {
-  const storageRef = ref(storage, `products/${Date.now()}_${file.name}`);
-  const metadata = { contentType: file.type };
-  await uploadBytes(storageRef, file, metadata);
-  const downloadURL = await getDownloadURL(storageRef);
-  return downloadURL;
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      const base64Data = reader.result as string;
+      try {
+        const url = await uploadToCloudinary(base64Data);
+        resolve(url);
+      } catch (error) {
+        reject(error);
+      }
+    };
+    reader.onerror = (error) => reject(error);
+  });
 }
