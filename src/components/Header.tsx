@@ -2,10 +2,20 @@
 
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { Search, ShoppingBag, User, Menu } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function Header() {
+  const handleSearchClick = () => {
+    const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
+    if (searchInput) {
+      searchInput.focus();
+      searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      window.location.href = '/#collections';
+    }
+  };
+
   return (
     <header className="bg-background/90 backdrop-blur-md sticky top-0 z-50 border-b border-primary/5 transition-all duration-300">
       <div className="container mx-auto px-4">
@@ -25,16 +35,13 @@ export default function Header() {
                       LYNN
                     </span>
                     <span className="text-[8px] font-body text-primary tracking-[0.3em] -mt-1 uppercase opacity-60">
-                      Boutique
+                      Clothing
                     </span>
                   </div>
                   <nav className="flex flex-col gap-8 text-[11px] uppercase tracking-[0.25em] font-medium text-center">
                     <Link href="/#collections" className="hover:text-primary transition-colors">Collections</Link>
                     <Link href="#" className="hover:text-primary transition-colors">Our Story</Link>
                     <Link href="#" className="hover:text-primary transition-colors">Contact</Link>
-                    <div className="pt-8 border-t border-primary/5 flex flex-col gap-6">
-                      <Link href="/admin/login" className="hover:text-primary transition-colors text-primary/60">Admin Portal</Link>
-                    </div>
                   </nav>
                 </div>
               </SheetContent>
@@ -54,23 +61,19 @@ export default function Header() {
               LYNN
             </span>
             <span className="text-[8px] md:text-[10px] font-body text-primary tracking-[0.45em] -mt-1 uppercase opacity-70">
-              Boutique
+              Clothing
             </span>
           </Link>
 
           {/* Right: Icons */}
           <div className="flex items-center gap-1 sm:gap-2">
-            <Button variant="ghost" size="icon" className="text-foreground/60 hover:text-primary transition-colors">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-foreground/60 hover:text-primary transition-colors"
+              onClick={handleSearchClick}
+            >
               <Search className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-foreground/60 hover:text-primary transition-colors hidden sm:flex" asChild title="Admin Portal">
-              <Link href="/admin/login">
-                <User className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button variant="ghost" size="icon" className="text-foreground/60 hover:text-primary transition-colors relative group">
-              <ShoppingBag className="h-4 w-4" />
-              <span className="absolute top-2.5 right-2.5 w-1 h-1 bg-primary rounded-full border border-background"></span>
             </Button>
           </div>
         </div>

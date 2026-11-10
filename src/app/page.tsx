@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/ProductCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Product } from "@/lib/types";
 import { getProducts } from "@/lib/products-service";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -79,7 +80,7 @@ export default function Home() {
             Curated <br />Sophistication.
           </h1>
           <p className="mt-6 text-lg md:text-xl max-w-2xl mx-auto text-foreground/80 font-body uppercase tracking-[0.3em]">
-            LYNN BOUTIQUE &bull; EST 2024
+            LYNN CLOTHING
           </p>
           <Button asChild size="lg" className="mt-12 tracking-widest uppercase bg-primary text-primary-foreground hover:bg-primary/90 px-12 py-8 text-sm">
             <Link href="#collections">Explore the Collection</Link>
@@ -92,6 +93,7 @@ export default function Home() {
             <div className="relative w-full max-w-xl">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input 
+                    ref={searchInputRef}
                     type="search"
                     placeholder="FIND YOUR STYLE..."
                     className="pl-12 w-full h-14 tracking-widest text-[10px] uppercase border-primary/20 bg-transparent rounded-none"

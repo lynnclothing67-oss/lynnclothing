@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
               LYNN
             </span>
             <span className="text-[10px] font-body text-primary tracking-[0.4em] uppercase">
-              Boutique
+              Clothing
             </span>
           </div>
           <CardTitle className="font-headline text-2xl">Admin Login</CardTitle>
@@ -84,11 +84,10 @@ export default function AdminLoginPage() {
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="email">Email</Label>
-              <input 
+              <Input 
                 id="email" 
                 type="email" 
-                placeholder="admin@lynn.boutique" 
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                placeholder="admin@lynn.clothing" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required 
@@ -97,11 +96,10 @@ export default function AdminLoginPage() {
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
-                <input 
+                <Input 
                   id="password" 
                   type={showPassword ? 'text' : 'password'} 
                   placeholder="password" 
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required 
@@ -136,10 +134,9 @@ export default function AdminLoginPage() {
                     Enter your email address and we'll send you a link to reset your password.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
-                <input
+                <Input
                   type="email"
                   placeholder="your-email@example.com"
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                   value={resetEmail}
                   onChange={(e) => setResetEmail(e.target.value)}
                 />
