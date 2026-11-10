@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { Search, Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
 export default function Header() {
   const handleSearchClick = () => {
@@ -29,6 +29,10 @@ export default function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="bg-background border-r-primary/5 w-[300px]">
+                <SheetHeader className="sr-only">
+                  <SheetTitle>LYNN Clothing Navigation</SheetTitle>
+                  <SheetDescription>Access our curated collections and story.</SheetDescription>
+                </SheetHeader>
                 <div className="flex flex-col h-full py-12 px-4">
                   <div className="flex flex-col items-center mb-12">
                     <span className="text-3xl font-bold font-headline text-primary tracking-[0.1em]">
