@@ -7,12 +7,14 @@ export function cn(...inputs: ClassValue[]) {
 
 /**
  * Formats a number as Indian Rupee (INR) currency.
- * Using Intl.NumberFormat is more robust than manual symbol insertion.
+ * Using a more robust formatting string to ensure the Rupee symbol (₹) 
+ * is rendered correctly across different environments.
  */
 export function formatCurrency(amount: number) {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
   }).format(amount);
 }
