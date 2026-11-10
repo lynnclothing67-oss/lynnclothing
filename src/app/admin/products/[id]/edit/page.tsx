@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { Product } from '@/lib/types';
 import { getProduct, updateProduct, uploadImage } from '@/lib/products-service';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Trash2, ListTree, Upload } from 'lucide-react';
+import { Loader2, Trash2, ListTree, Upload, Link as LinkIcon, Plus } from 'lucide-react';
 import Image from 'next/image';
 
 export default function EditProductPage() {
@@ -29,6 +29,7 @@ export default function EditProductPage() {
   const [discount, setDiscount] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [externalUrl, setExternalUrl] = useState('');
   const [details, setDetails] = useState<string[]>([]);
   const [currentDetail, setCurrentDetail] = useState('');
 
@@ -68,11 +69,29 @@ export default function EditProductPage() {
       toast({
         variant: "destructive",
         title: "Image upload failed",
-        description: "There was an error uploading your images to Cloudinary.",
+        description: "There was an error uploading your images up to Cloudinary.",
       });
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleAddExternalUrl = () => {
+    if (!externalUrl.trim()) return;
+    if (imageUrls.includes(externalUrl.trim())) {
+      toast({
+        variant: 'destructive',
+        title: 'Duplicate URL',
+        description: 'This image link is already points to an existng photo.',
+      });
+      return;
+    }
+    setImageUrls(prev => [...prev, externalUrl.trim()]);
+    setExternalUrl('');
+    toast({
+      title: 'Link Added',
+      description: 'The photo link has been successfully integrated.',
+    });
   };
 
   const handleRemoveImageUrl = (urlToRemove: string) => {
@@ -102,7 +121,7 @@ export default function EditProductPage() {
       toast({
           variant: 'destructive',
           title: 'Image Required',
-          description: 'Please upload at least one image.',
+          description: 'Please upload or link at least one image.',
       });
       setLoading(false);
       return;
@@ -123,7 +142,7 @@ export default function EditProductPage() {
       
       toast({
         title: 'Product Updated',
-        description: 'The product has been successfully updated.',
+        description: 'The product details have been successfully revised.',
       });
       router.push('/admin');
 
@@ -144,7 +163,7 @@ export default function EditProductPage() {
        <Card className="max-w-2xl mx-auto rounded-none border-primary/10">
         <CardHeader>
           <CardTitle className="font-headline text-2xl">Edit Piece</CardTitle>
-          <CardDescription className="text-[10px] uppercase tracking-widest">Update the details for {product.name} at LYNN Clothing.</CardDescription>
+          <CardDescription className="text-[10px] uppercase tracking-widest">Update the details for {product.name} in the collection.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid w-full items-center gap-6">
@@ -170,12 +189,12 @@ export default function EditProductPage() {
               <Label htmlFor="description" className="text-[10px] uppercase tracking-widest font-bold">Description</Label>
               <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="rounded-none border-primary/20 min-h-[120px]" />
             </div>
-             <div className="flex flex-col space-y-2">
+             <div className="flex flex-col space-y-4">
                 <Label className="text-[10px] uppercase tracking-widest font-bold">Product Images</Label>
-                <div className="p-4 border border-dashed border-primary/20 rounded-none space-y-4">
+                <div className="p-4 border border-primary/20 rounded-none space-y-6">
                     <div className="grid grid-cols-3 gap-3">
                         {imageUrls.map((url, index) => (
-                        <div key={index} className="relative group aspect-[3/4] border border-primary/5">
+                        <div key={index} className="relative group aspect-[3/4] border border-primary/5 bg-secondary/5">
                             <Image src={url} alt={`Product image ${index + 1}`} fill className="object-cover" />
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                             <Button type="button" size="icon" variant="destructive" className="h-8 w-8 rounded-none" onClick={() => handleRemoveImageUrl(url)}>
@@ -186,18 +205,52 @@ export default function EditProductPage() {
                         ))}
                     </div>
 
-                    {uploading ? (
-                      <div className="flex flex-col items-center justify-center p-8 bg-secondary/10">
-                        <Loader2 className="h-8 w-8 animate-spin mb-2 text-primary" />
-                        <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Uploading to Cloudinary...</span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Upload Section */}
+                      {uploading ? (
+                        <div className="flex flex-col items-center justify-center p-8 bg-secondary/10 border border-dashed border-primary/20">
+                          <Loader2 className="h-6 w-6 animate-spin mb-2 text-primary" />
+                          <span className="text-[9px] uppercase tracking-[0.2em] font-bold">Processing...</span>
+                        </div>
+                      ) : (
+                        <Label htmlFor="image-upload" className="flex flex-col items-center justify-center p-8 border border-dashed border-primary/20 rounded-none cursor-pointer hover:bg-secondary/20 transition-colors">
+                          <Upload className="h-5 w-5 mb-2 text-primary/60" />
+                          <span className="text-[9px] uppercase tracking-[0.2em] font-bold">Add from Computer</span>
+                          <Input id="image-upload" type="file" multiple accept="image/*" className="sr-only" onChange={handleImageUpload} disabled={uploading} />
+                        </Label>
+                      )}
+
+                      {/* URL Section */}
+                      <div className="flex flex-col justify-center p-4 bg-secondary/5 border border-primary/5 space-y-3">
+                        <div className="flex items-center gap-2">
+                           <LinkIcon className="h-4 w-4 text-primary/60" />
+                           <span className="text-[9px] uppercase tracking-[0.2em] font-bold">Add by URL</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <input 
+                            placeholder="https://image.com/photo.jpg"
+                            className="flex h-9 w-full border border-primary/20 bg-background px-3 py-2 text-xs focus-visible:outline-none rounded-none"
+                            value={externalUrl}
+                            onChange={(e) => setExternalUrl(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleAddExternalUrl();
+                              }
+                            }}
+                          />
+                          <Button 
+                            type="button" 
+                            variant="secondary" 
+                            size="icon" 
+                            className="h-9 w-9 shrink-0 rounded-none"
+                            onClick={handleAddExternalUrl}
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
-                    ) : (
-                      <Label htmlFor="image-upload" className="w-full flex flex-col items-center justify-center p-8 border-2 border-dashed border-primary/10 rounded-none cursor-pointer hover:bg-secondary/20 transition-colors">
-                        <Upload className="h-6 w-6 mb-2 text-primary/60" />
-                        <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Add Images</span>
-                        <Input id="image-upload" type="file" multiple accept="image/*" className="sr-only" onChange={handleImageUpload} disabled={uploading} />
-                      </Label>
-                    )}
+                    </div>
                 </div>
             </div>
             <div className="flex flex-col space-y-2">
