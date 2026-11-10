@@ -4,7 +4,7 @@ import LayoutWrapper from "./LayoutWrapper";
 
 
 export const metadata: Metadata = {
-  title: "LYNN BOUTIQUE",
+  title: "LYNN Boutique",
   description: "Sophisticated Elegance for the Modern Individual",
 };
 

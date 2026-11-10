@@ -29,7 +29,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="text-center text-muted-foreground text-[10px] mt-12 pt-8 border-t tracking-widest uppercase">
-          <p>&copy; {new Date().getFullYear()} LYNN BOUTIQUE. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} LYNN Boutique. All rights reserved.</p>
         </div>
       </div>
     </footer>

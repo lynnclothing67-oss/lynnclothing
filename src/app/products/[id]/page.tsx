@@ -1,4 +1,3 @@
-
 'use client';
 
 import { notFound, useParams } from "next/navigation";
@@ -80,10 +79,10 @@ export default function ProductPage() {
           </div>
           
           <div className="flex items-baseline gap-4">
-            <p className="text-3xl font-semibold text-primary">₹{discountedPrice.toFixed(2)}</p>
+            <p className="text-3xl font-semibold text-primary">{"\u20B9"}{discountedPrice.toFixed(2)}</p>
              {product.discount && (
                 <p className="text-xl font-medium text-muted-foreground line-through">
-                  ₹{product.price.toFixed(2)}
+                  {"\u20B9"}{product.price.toFixed(2)}
                 </p>
               )}
           </div>

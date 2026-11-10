@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from "next/link";
@@ -42,11 +41,11 @@ export default function ProductCard({ product }: ProductCardProps) {
             </h3>
             <div className="flex items-center justify-center gap-3">
               <p className="text-primary font-bold">
-                ₹{discountedPrice.toFixed(2)}
+                {"\u20B9"}{discountedPrice.toFixed(2)}
               </p>
               {product.discount && (
                 <p className="text-muted-foreground line-through text-xs opacity-60">
-                  ₹{product.price.toFixed(2)}
+                  {"\u20B9"}{product.price.toFixed(2)}
                 </p>
               )}
             </div>
