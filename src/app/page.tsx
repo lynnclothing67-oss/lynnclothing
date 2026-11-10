@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from "next/image";
@@ -10,6 +11,7 @@ import { Product } from "@/lib/types";
 import { getProducts } from "@/lib/products-service";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import placeholders from "@/app/lib/placeholder-images.json";
 
 export default function Home() {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -60,20 +62,17 @@ export default function Home() {
   if (loading) {
     return <div className="flex h-[60vh] items-center justify-center font-headline italic">LYNN is loading...</div>
   }
-  
-  const productsToShow = activeTab ? filteredProducts.filter(p => p.category === activeTab) : filteredProducts;
 
   return (
     <div className="container mx-auto px-4 py-8">
       <section className="relative text-center py-32 mb-16 overflow-hidden bg-secondary/20">
         <div className="absolute inset-0">
           <Image
-            src="https://picsum.photos/seed/fashion/1920/1080"
-            alt="LYNN Lifestyle"
-            layout="fill"
-            objectFit="cover"
-            className="opacity-10"
-            data-ai-hint="lifestyle fashion"
+            src={placeholders.hero.src}
+            alt={placeholders.hero.alt}
+            fill
+            className="opacity-10 object-cover"
+            data-ai-hint={placeholders.hero.aiHint}
           />
         </div>
         <div className="relative z-10 px-4">
